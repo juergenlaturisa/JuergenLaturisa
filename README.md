@@ -1,6 +1,6 @@
-<a href="https://github.com/YOUR_GITHUB_USERNAME/YOUR_GITHUB_USERNAME">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_GITHUB_USERNAME/main/dark_mode.svg">
-    <img alt="GitHub Profile README" src="https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_GITHUB_USERNAME/main/light_mode.svg">
-  </picture>
-</a>
+### 📊 My GitHub Stats
+
+<p align="center">
+  <img src="dark_mode.svg#gh-dark-mode-only" alt="GitHub Stats Dark Mode" width="450px">
+  <img src="light_mode.svg#gh-light-mode-only" alt="GitHub Stats Light Mode" width="450px">
+</p>
