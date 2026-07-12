@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="profile.svg" alt="JuergenLaw" />
+  <img src="profile.svg" alt="JuergenLaw Profile">
 </p>
