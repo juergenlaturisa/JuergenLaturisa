@@ -49,12 +49,10 @@ text, tspan {white-space: pre;}
 
 <tspan x="390" y="50" class="cc">. </tspan><tspan class="key">Education</tspan>:<tspan class="cc"> ..... </tspan><tspan class="value">HBSc Forensic Science @ UofT Mississauga</tspan>
 <tspan x="390" y="70" class="cc">. </tspan><tspan class="key">Tech Stack</tspan>:<tspan class="cc"> ..... </tspan><tspan class="value">Python, R, HTML5, JavaScript (ES6), Git</tspan>
-
 <tspan x="390" y="90" class="cc">. </tspan><tspan class="key">Languages</tspan>:<tspan class="cc"> . </tspan><tspan class="value">Indonesian, English, German, Min Nan Chinese</tspan>
+<tspan x="390" y="110" class="cc">. </tspan><tspan class="key">Interests</tspan>:<tspan class="cc"> ..... </tspan><tspan class="value">Bloons TD 6, Collecting University Pens</tspan>
 
-<tspan x="390" y="150" class="cc">. </tspan><tspan class="key">Interests</tspan>:<tspan class="cc"> ..................... </tspan><tspan class="value">Bloons TD 6, Collecting University Pens</tspan>
-
-<tspan x="390" y="190">- Projects</tspan> -———————————————————————————————————————————————
+<tspan x="390" y="130">- Projects</tspan> -———————————————————————————————————————————————
 
 <tspan x="390" y="210" class="cc">. </tspan><tspan class="key">ARGUS</tspan>:<tspan class="cc"> ......................... </tspan><tspan class="value">Accounting Report &amp; GUidance System</tspan>
 <tspan x="390" y="230" class="cc">. </tspan><tspan class="cc">                                         </tspan><tspan class="value">Jan 2025 – Present</tspan>
