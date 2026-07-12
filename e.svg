@@ -68,7 +68,7 @@ text, tspan {white-space: pre;}
 
 <tspan x="390" y="470" class="cc">. </tspan><tspan class="key">ORCID</tspan>:<tspan class="cc"> ............................ </tspan><a href="https://orcid.org/0009-0000-8070-2480"><tspan class="value">0009-0000-8070-2480</tspan></a>
 
-<tspan x="390" y="490" class="cc">. </tspan><tspan class="key">GitHub</tspan>:<tspan class="cc"> ........................... </tspan><tspan class="value">github.com/juergenlaw</tspan>
+<tspan x="390" y="500" class="cc">. </tspan><tspan class="key">GitHub</tspan>:<tspan class="cc"> ........................... </tspan><tspan class="value">github.com/juergenlaw</tspan>
 
 </text>
 </svg>
