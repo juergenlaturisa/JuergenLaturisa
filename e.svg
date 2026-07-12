@@ -48,10 +48,7 @@ text, tspan {white-space: pre;}
 <tspan x="390" y="30">JuergenLaw</tspan> -———————————————————————————————————————————————
 
 <tspan x="390" y="50" class="cc">. </tspan><tspan class="key">Education</tspan>:<tspan class="cc"> ..... </tspan><tspan class="value">HBSc Forensic Science @ UofT Mississauga</tspan>
-<tspan x="390" y="70" class="cc">. </tspan><tspan class="cc">                           </tspan><tspan class="value">Sep 2026 – Jun 2030 (Expected)</tspan>
-  
-<tspan x="390" y="90" class="cc">. </tspan><tspan class="key">Tech Stack</tspan>:<tspan class="cc"> ...... </tspan><tspan class="value">Python, JavaScript, Google Apps Script</tspan>
-<tspan x="390" y="110" class="cc">. </tspan><tspan class="cc">                          </tspan><tspan class="value">Google Sheets API, R, HTML, Git</tspan>
+<tspan x="390" y="90" class="cc">. </tspan><tspan class="key">Tech Stack</tspan>:<tspan class="cc"> ...... </tspan><tspan class="value">Python, Google Apps Script, R, HTML</tspan>
 
 <tspan x="390" y="130" class="cc">. </tspan><tspan class="key">Languages</tspan>:<tspan class="cc"> ..................... </tspan><tspan class="value">Indonesian, English, German</tspan>
 
