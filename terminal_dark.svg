@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="380" viewBox="0 0 800 380" fill="none">
+  <style>
+    .bg { fill: #0d1117; rx: 12px; }
+    .window-header { fill: #161b22; }
+    .btn-red { fill: #ff5f56; }
+    .btn-yellow { fill: #ffbd2e; }
+    .btn-green { fill: #27c93f; }
+    .title { fill: #8b949e; font-family: 'Fira Code', 'Courier New', monospace; font-size: 13px; }
+    .ascii { fill: #58a6ff; font-family: 'Fira Code', 'Courier New', monospace; font-size: 12px; line-height: 1.2; font-weight: bold; }
+    .label { fill: #58a6ff; font-family: 'Fira Code', 'Courier New', monospace; font-size: 13px; font-weight: bold; }
+    .value { fill: #c9d1d9; font-family: 'Fira Code', 'Courier New', monospace; font-size: 13px; }
+    .highlight { fill: #ff7b72; font-family: 'Fira Code', 'Courier New', monospace; font-size: 13px; font-weight: bold; }
+    .green-val { fill: #3fb950; font-family: 'Fira Code', 'Courier New', monospace; font-size: 13px; }
+  </style>
+
+  <!-- Terminal Window Background -->
+  <rect class="bg" width="800" height="380" />
+
+  <!-- Window Header Bar -->
+  <path class="window-header" d="M0 12C0 5.37258 5.37258 0 12 0H788C794.627 0 800 5.37258 800 12V35H0V12Z" />
+  <circle class="btn-red" cx="20" cy="17" r="6" />
+  <circle class="btn-yellow" cx="40" cy="17" r="6" />
+  <circle class="btn-green" cx="60" cy="17" r="6" />
+  <text class="title" x="400" y="22" text-anchor="middle">juergen-law @ utm-forensics-terminal</text>
+
+  <!-- Left Side: DNA Double Helix ASCII Art -->
+  <g transform="translate(35, 75)">
+    <text class="ascii" xml:space="preserve">
+      <tspan x="0" dy="1.2em">      A - T</tspan>
+      <tspan x="0" dy="1.2em">     G --- C</tspan>
+      <tspan x="0" dy="1.2em">    C ----- G</tspan>
+      <tspan x="0" dy="1.2em">    T ----- A</tspan>
+      <tspan x="0" dy="1.2em">     A --- T</tspan>
+      <tspan x="0" dy="1.2em">      G - C</tspan>
+      <tspan x="0" dy="1.2em">      C - G</tspan>
+      <tspan x="0" dy="1.2em">     A --- T</tspan>
+      <tspan x="0" dy="1.2em">    T ----- A</tspan>
+      <tspan x="0" dy="1.2em">    G ----- C</tspan>
+      <tspan x="0" dy="1.2em">     C --- G</tspan>
+      <tspan x="0" dy="1.2em">      T - A</tspan>
+      <tspan x="0" dy="1.2em">      A - T</tspan>
+    </text>
+  </g>
+
+  <!-- Right Side: System Specs -->
+  <g transform="translate(230, 80)">
+    <!-- Header -->
+    <text class="highlight" x="0" y="15">juergen-law@utm-forensic-system</text>
+    <text class="value" x="0" y="30">---------------------------------</text>
+
+    <!-- Specs -->
+    <text class="label" x="0" y="55">OS: <tspan class="value">Forensic Core OS v2026.07</tspan></text>
+    <text class="label" x="0" y="75">Host: <tspan class="value">University of Toronto Mississauga (UTM)</tspan></text>
+    <text class="label" x="0" y="95">Kernel: <tspan class="value">Forensic Biology &amp; Molecular Genetics</tspan></text>
+    <text class="label" x="0" y="115">Scholarship: <tspan class="green-val">UofT International Scholar Award</tspan></text>
+    
+    <!-- Languages -->
+    <text class="label" x="0" y="145">Languages.Code: <tspan class="value">Apps Script, JavaScript, Python, R, LaTeX</tspan></text>
+    <text class="label" x="0" y="165">Languages.Real: <tspan class="value">Indonesian (Native), English (IELTS 7.5), German (B1)</tspan></text>
+    
+    <!-- Hobbies -->
+    <text class="label" x="0" y="195">Hobbies.Software: <tspan class="value">Ledgers (ARGUS), Cold-Chain Trackers (HORUS)</tspan></text>
+    <text class="label" x="0" y="215">Hobbies.Hardware: <tspan class="value">Collecting University Pens, Tissue Cultures</tspan></text>
+
+    <!-- Divider -->
+    <text class="value" x="0" y="235">---------------------------------</text>
+
+    <!-- Dynamic Stats (Overwritten by python) -->
+    <text class="label" x="0" y="255">GitHub.Repos: <tspan class="green-val" id="repos">{REPOS}</tspan></text>
+    <text class="label" x="0" y="275">GitHub.Commits: <tspan class="green-val" id="commits">{COMMITS}</tspan></text>
+    <text class="label" x="0" y="295">GitHub.Stars: <tspan class="green-val" id="stars">{STARS}</tspan></text>
+    <text class="label" x="0" y="315">GitHub.CodeLines: <tspan class="green-val" id="lines">{LINES}</tspan></text>
+  </g>
+</svg>
