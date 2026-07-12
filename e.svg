@@ -60,7 +60,7 @@ text, tspan {white-space: pre;}
   
 <tspan x="390" y="330">- Experience</tspan> -—————————————————————————————————————————————
 <tspan x="390" y="350" class="cc">. </tspan><tspan class="key">Hackathon</tspan>:<tspan class="cc"> ..................... </tspan><tspan class="value">Vitalitics Hackathon 2026</tspan>
-<tspan x="390" y="370" class="cc"> </tspan><tspan class="cc">                                         </tspan><tspan class="value">Participant · Aug 2026</tspan>
+<tspan x="390" y="370" class="cc"> </tspan><tspan class="cc">                                         </tspan><tspan class="value" font-style="italic">Participant · Aug 2026</tspan>
 
 <tspan x="390" y="390">- Contact</tspan> -———————————————————————————————————————————————
 
