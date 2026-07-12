@@ -1,3 +1,69 @@
-<p align="center">
-  <img src="profile.svg" alt="JuergenLaw Profile">
-</p>
+<?xml version='1.0' encoding='UTF-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="530px" font-size="16px">
+<style>
+@font-face {
+src: local('Consolas'), local('Consolas Bold');
+font-family: 'ConsolasFallback';
+font-display: swap;
+-webkit-size-adjust: 109%;
+size-adjust: 109%;
+}
+.key {fill: #ffa657;}
+.value {fill: #a5d6ff;}
+.addColor {fill: #3fb950;}
+.delColor {fill: #f85149;}
+.cc {fill: #616e7f;}
+text, tspan {white-space: pre;}
+</style>
+<rect width="985px" height="530px" fill="#161b22" rx="15"/>
+<text x="15" y="30" fill="#c9d1d9" class="ascii">
+<tspan x="15" y="30">               #%%%%@%%                      </tspan>
+<tspan x="15" y="50">           ***********##%%%                  </tspan>
+<tspan x="15" y="70">        **+++++++++******#%#%%               </tspan>
+<tspan x="15" y="90">      **+++++++++++++++++*####%#             </tspan>
+<tspan x="15" y="110">      +++++==+++=++=+++++++**####%            </tspan>
+<tspan x="15" y="130">    +++++++========+++++******####%#          </tspan>
+<tspan x="15" y="150">   +============+++++****##%%%@*%%%#          </tspan>
+<tspan x="15" y="170">   ===========+++***######%%@@@@*#%           </tspan>
+<tspan x="15" y="190">   ======++******#############@@%* </tspan>
+<tspan x="15" y="210">   =====+#%%***+++++**##**+++*#@@#            </tspan>
+<tspan x="15" y="230">    ====+*==##*******++=+****#%@@** </tspan>
+<tspan x="15" y="250">    =====**+***++***#++*+#***##%@** </tspan>
+<tspan x="15" y="270">   **##+*%#*########*+#%%#%###%@@#            </tspan>
+<tspan x="15" y="290">   **####%%%*######*####%@%*####%@            </tspan>
+<tspan x="15" y="310">   **#*##%%%%%###****=+**+####%%@@            </tspan>
+<tspan x="15" y="330">    #*###########*####**#%%%###%@@            </tspan>
+<tspan x="15" y="350">     ##########*+*#####*##@@#*#@@@            </tspan>
+<tspan x="15" y="370">         ######*+*#######%@@**#@@@            </tspan>
+<tspan x="15" y="390">         ############****#%@@%%@@             </tspan>
+<tspan x="15" y="410">         #***############%%@@@@@              </tspan>
+<tspan x="15" y="430">    #%#####****#####****#%%@@@@               </tspan>
+<tspan x="15" y="450">****+=+***###*+++*********##%%%               </tspan>
+<tspan x="15" y="470">=========+*###***++++++++++%@                 </tspan>
+<tspan x="15" y="490">============*##******++++*%@@@                </tspan>
+<tspan x="15" y="510">=========---=***********#@@%*@@               </tspan>
+<tspan x="15" y="530">======--=-=---=*********#@@=#*%@              </tspan>
+</text>
+<text x="390" y="30" fill="#c9d1d9">
+<tspan x="390" y="30">JuergenLaw</tspan> -———————————————————————————————————————————————
+<tspan x="390" y="60" class="cc">. </tspan><tspan class="key">Education</tspan>:<tspan class="cc"> ..... </tspan><tspan class="value">HBSc Forensic Science @ UofT Mississauga</tspan>
+<tspan x="390" y="80" class="cc"> </tspan><tspan class="cc">                            </tspan><tspan class="value" font-style="italic">Sep 2026 – Jun 2030 (Expected)</tspan>
+<tspan x="390" y="110" class="cc">. </tspan><tspan class="key">Tech Stack</tspan>:<tspan class="cc"> ..... </tspan><tspan class="value">Python, R, HTML5, JavaScript (ES6), Git</tspan>
+<tspan x="390" y="140" class="cc">. </tspan><tspan class="key">Languages</tspan>:<tspan class="cc"> . </tspan><tspan class="value">Indonesian, English, German, Min Nan Chinese</tspan>
+<tspan x="390" y="170" class="cc">. </tspan><tspan class="key">Interests</tspan>:<tspan class="cc"> ...... </tspan><tspan class="value">Bloons TD 6, Collecting University Pens</tspan>
+
+<tspan x="390" y="210">- Projects</tspan> -———————————————————————————————————————————————
+<tspan x="390" y="240" class="cc">. </tspan><tspan class="key">ARGUS</tspan>:<tspan class="cc"> .............. </tspan><tspan class="value">Accounting Report &amp; GUidance System</tspan>
+<tspan x="390" y="260" class="cc"> </tspan><tspan class="cc">                                        </tspan><tspan class="value" font-style="italic">Jan 2025 – Present</tspan>
+<tspan x="390" y="290" class="cc">. </tspan><tspan class="key">HORUS</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">Healthcare &amp; Operational Reagent Upkeep System</tspan>
+<tspan x="390" y="310" class="cc"> </tspan><tspan class="cc">                                       </tspan><tspan class="value" font-style="italic">Jun 2026 – Aug 2026</tspan>
+
+<tspan x="390" y="350">- Contacts</tspan> -———————————————————————————————————————————————
+<tspan x="390" y="380" class="cc">. </tspan><tspan class="key">Email</tspan>.<tspan class="key">Personal</tspan>:<tspan class="cc"> .............. </tspan><a href="mailto:juergenllaturisa@gmail.com"><tspan class="value">juergenllaturisa@gmail.com</tspan></a>
+<tspan x="390" y="410" class="cc">. </tspan><tspan class="key">LinkedIn</tspan>:<tspan class="cc"> ................................... </tspan><a href="https://www.linkedin.com/in/juergen-law/"><tspan class="value">Juergen Law</tspan></a>
+<tspan x="390" y="440" class="cc">. </tspan><tspan class="key">ResearchGate</tspan>:<tspan class="cc"> ........................ </tspan><a href="https://www.researchgate.net/profile/Juergen-Laturisa"><tspan class="value">Juergen L Laturisa</tspan></a>
+<tspan x="390" y="470" class="cc">. </tspan><tspan class="key">ORCID</tspan>:<tspan class="cc"> .............................. </tspan><a href="https://orcid.org/0009-0000-8070-2480"><tspan class="value">0009-0000-8070-2480</tspan></a>
+<tspan x="390" y="500" class="cc">. </tspan><tspan class="key">GitHub</tspan>:<a href="https://github.com/JuergenLaw"><tspan class="value">github.com/juergenlaw</tspan></a>
+
+</text>
+</svg>
