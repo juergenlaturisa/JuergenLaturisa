@@ -47,7 +47,7 @@ text, tspan {white-space: pre;}
 <text x="390" y="30" fill="#c9d1d9">
 <tspan x="390" y="30">JuergenLaw</tspan> -———————————————————————————————————————————————
 
-<tspan x="390" y="50" class="cc">. </tspan><tspan class="key">Education</tspan>:<tspan class="cc"> ..................... </tspan><tspan class="value">HBSc Forensic Science + Biology @ UTM</tspan>
+<tspan x="390" y="50" class="cc">. </tspan><tspan class="key">Education</tspan>:<tspan class="cc"> ... </tspan><tspan class="value">HBSc Forensic Science @ UofT</tspan>
 
 <tspan x="390" y="70" class="cc">. </tspan><tspan class="key">Tech Stack</tspan>:<tspan class="cc"> .................... </tspan><tspan class="value">Python, R, Google Apps Script</tspan>
 <tspan x="390" y="90" class="cc">. </tspan><tspan class="cc">                                         </tspan><tspan class="value">Google Sheets API, JavaScript</tspan>
