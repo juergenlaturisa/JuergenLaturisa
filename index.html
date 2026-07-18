@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- This is your updated title -->
     <title>Juergen Law Laturisa | Portfolio</title>
-    
-    <!-- This is the favicon line -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
-
-    <!-- All your other fonts/links go here -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-</head>
     
     <style>
         :root {
@@ -27,44 +20,30 @@
             --accent-green: #34d399;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-    background-color: #0f1622;
-    color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem 1rem;
-    
-    /* Layer 1: The mouse tracking glow (uses CSS variables updated by JS) */
-    /* Layer 2: Lightened moving diagonal patterns */
-    /* Layer 3: Deep base gradient backdrop */
-    background-image: 
-        radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.12), transparent 40%),
-        linear-gradient(135deg, rgba(56, 189, 248, 0.08) 25%, transparent 25%, transparent 50%, rgba(56, 189, 248, 0.08) 50%, rgba(56, 189, 248, 0.08) 75%, transparent 75%, transparent),
-        linear-gradient(180deg, #0b0f17 0%, #111a2e 50%, #0b0f17 100%);
-    
-    background-size: 100% 100%, 160px 160px, 100% 100%;
-    background-attachment: fixed;
-    
-    animation: backgroundCycle 25s linear infinite;
-}
+            background-color: #0f1622;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            background-image: 
+                radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.12), transparent 40%),
+                linear-gradient(135deg, rgba(56, 189, 248, 0.08) 25%, transparent 25%, transparent 50%, rgba(56, 189, 248, 0.08) 50%, rgba(56, 189, 248, 0.08) 75%, transparent 75%, transparent),
+                linear-gradient(180deg, #0b0f17 0%, #111a2e 50%, #0b0f17 100%);
+            background-size: 100% 100%, 160px 160px, 100% 100%;
+            background-attachment: fixed;
+            animation: backgroundCycle 25s linear infinite;
+        }
 
-@keyframes backgroundCycle {
-    0% {
-        background-position: center, 0px 0px, center;
-    }
-    100% {
-        background-position: center, 160px 160px, center;
-    }
-}
+        @keyframes backgroundCycle {
+            0% { background-position: center, 0px 0px, center; }
+            100% { background-position: center, 160px 160px, center; }
+        }
 
         .container {
             width: 100%;
@@ -77,335 +56,38 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* Profile Section */
-        .profile {
-            text-align: center;
-            margin-bottom: 1.5rem; /* Shortened gap to links below */
-        }
+        .profile { text-align: center; margin-bottom: 1.5rem; }
+        .avatar-container { position: relative; width: 150px; height: 150px; margin: 0 auto 1.5rem; }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); background: #1e293b; }
+        .name { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .tagline { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--accent-blue); margin-bottom: 0.75rem; text-transform: uppercase; }
+        .bio { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; }
 
-        .avatar-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 1.5rem;
-        }
+        .links-container { display: flex; flex-direction: column; gap: 1rem; }
+        .section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; margin: 0.5rem 0 0.25rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .section-label::before, .section-label::after { content: ''; width: 30px; height: 1px; background: var(--border-color); }
 
-        .avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border-color);
-            background: #1e293b;
-        }
+        .accordion-wrapper { display: flex; flex-direction: column; gap: 0.5rem; }
+        .accordion-trigger { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; }
+        .accordion-checkbox { display: none; }
+        .accordion-content { max-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 0.5rem; transition: max-height 0.3s ease; }
+        .accordion-checkbox:checked ~ .accordion-content { max-height: 500px; padding-left: 1rem; border-left: 2px solid var(--border-color); }
+        .accordion-checkbox:checked ~ .accordion-trigger .accordion-chevron { transform: rotate(90deg); color: var(--accent-blue); }
 
-        .avatar-container::before, .avatar-container::after {
-            content: '';
-            position: absolute;
-            border: 1px solid var(--accent-blue);
-            width: 12px;
-            height: 12px;
-            transition: all 0.3s ease;
-        }
-        .avatar-container::before { top: -4px; left: -4px; border-right: none; border-bottom: none; }
-        .avatar-container::after { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+        .sub-link-card { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(19, 26, 38, 0.6); border: 1px solid var(--border-color); border-radius: 6px; text-decoration: none; color: var(--text-primary); }
+        .link-info { display: flex; flex-direction: column; gap: 0.25rem; }
+        .link-title { font-weight: 500; }
+        .link-desc { font-size: 0.8rem; color: var(--text-secondary); }
 
-        .name {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .tagline {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--accent-blue);
-            margin-bottom: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .bio {
-            font-size: 0.92rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* Content Blocks / Links */
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .section-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-top: 0.5rem; /* Shortened gap */
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            white-space: nowrap;
-        }
-
-        .section-label::before,
-        .section-label::after {
-            content: '';
-            width: 30px;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        /* Sub-labels within grids */
-        .grid-sub-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            line-height: 1;
-            text-transform: uppercase;
-            margin-top: 0.2rem;
-        }
-
-        /* Accordion Wrapper */
-        .accordion-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .accordion-trigger {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.25rem;
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.2s ease;
-        }
-
-        .accordion-trigger:hover {
-            background: rgba(56, 189, 248, 0.06);
-            border-color: var(--accent-blue);
-        }
-
-        .highlight-trigger {
-            border-color: rgba(52, 211, 153, 0.3);
-        }
-        .highlight-trigger:hover {
-            border-color: var(--accent-green);
-            background: rgba(52, 211, 153, 0.06);
-        }
-
-        .accordion-checkbox {
-            display: none;
-        }
-
-        .accordion-chevron {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            padding-left: 0;
-            border-left: 0px solid var(--border-color);
-            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        padding-left 0.3s ease, 
-                        border-left 0.1s ease;
-        }
-
-        .accordion-checkbox:checked ~ .accordion-content {
-            max-height: 500px;
-            padding-left: 1rem;
-            border-left: 2px solid var(--border-color);
-        }
-
-        .accordion-checkbox:checked ~ .accordion-trigger .accordion-chevron {
-            transform: rotate(90deg);
-            color: var(--accent-blue);
-        }
-        
-        .accordion-checkbox:checked ~ .highlight-trigger .accordion-chevron {
-            color: var(--accent-green);
-        }
-
-        .sub-link-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1rem;
-            background: rgba(19, 26, 38, 0.6);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.2s ease;
-        }
-
-        .sub-link-card:hover {
-            border-color: var(--text-secondary);
-            background: rgba(30, 41, 59, 0.6);
-        }
-
-        .link-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-            max-width: 85%;
-        }
-
-        .link-title {
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        .sub-link-title {
-            font-size: 0.88rem;
-            font-family: 'JetBrains Mono', monospace;
-            line-height: 1.4;
-        }
-
-        .link-desc {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            line-height: 1.3;
-        }
-
-        .link-arrow {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            transition: transform 0.2s ease;
-            flex-shrink: 0;
-            margin-left: 0.5rem;
-        }
-
-        .accordion-trigger:hover .link-arrow, .sub-link-card:hover .link-arrow {
-            color: var(--accent-blue);
-            transform: translateX(4px);
-        }
-        
-        .highlight-trigger:hover .link-arrow {
-            color: var(--accent-green);
-        }
-
-        /* Accounts Grid with SVG icons */
-        .accounts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
-            gap: 0.6rem;
-            margin-top: 0.25rem;
-            margin-bottom: 0.35rem;
-        }
-
-        .account-button {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 0.5rem;
-            padding: 0.65rem 0.75rem;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .account-button img,
-        .account-button svg {
-            width: 14px;
-            height: 14px;
-            flex-shrink: 0;
-            transition: all 0.2s ease;
-        }
-
-        .account-button img {
-            filter: invert(71%) sepia(13%) saturate(543%) hue-rotate(176deg) brightness(89%) contrast(89%);
-        }
-
-        .account-button svg {
-            fill: var(--text-secondary);
-        }
-
-        .account-button:hover {
-            color: var(--text-primary);
-            border-color: var(--accent-blue);
-            background: rgba(56, 189, 248, 0.03);
-        }
-
-        .account-button:hover img {
-            filter: invert(68%) sepia(84%) saturate(1915%) hue-rotate(174deg) brightness(101%) contrast(98%);
-        }
-
-        .account-button:hover svg {
-            fill: var(--accent-blue);
-        }
-
-        .eng-grid .account-button:hover {
-            border-color: var(--accent-green);
-            background: rgba(52, 211, 153, 0.03);
-        }
-        .eng-grid .account-button:hover img {
-            filter: invert(70%) sepia(91%) saturate(362%) hue-rotate(106deg) brightness(93%) contrast(89%);
-        }
-      /* Responsive adjustments for phones/tablets */
-@media (max-width: 600px) {
-    .container {
-        padding: 2rem 1.25rem; /* Narrower padding on phones */
-    }
-    
-    .name {
-        font-size: 1.3rem; /* Slightly smaller name so it doesn't wrap awkwardly */
-    }
-
-    .tagline {
-        font-size: 0.78rem; /* Fit on one line */
-    }
-
-    .accounts-grid {
-        /* Make sure the account buttons scale well on narrow screens */
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 0.5rem;
-    }
-
-    .account-button {
-        padding: 0.55rem 0.65rem; /* Compact padding */
-        font-size: 0.75rem;
-    }
-}
+        .accounts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 0.6rem; margin: 0.25rem 0; }
+        .account-button { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; text-decoration: none; cursor: pointer; }
+        .account-button img, .account-button svg { width: 14px; height: 14px; }
+        .account-button:hover { color: var(--text-primary); border-color: var(--accent-blue); }
     </style>
 </head>
-  <script>
-    // Tracks the mouse position and pipes it directly into the CSS background layer
-    document.body.addEventListener('mousemove', (e) => {
-        document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
-        document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
-    });
-</script>
-</body>
+<body>
 
     <div class="container">
-        
-        <!-- Profile Header -->
         <header class="profile">
             <div class="avatar-container">
                 <img class="avatar" src="https://media.licdn.com/dms/image/v2/D5603AQHg5uhNE51ikg/profile-displayphoto-scale_400_400/B56Z6ZAF7TH0Ag-/0/1780683402540?e=1785974400&v=beta&t=SRF20rJZSCSEN0vIdJeR7lVWNapXg7Ndjjls54jzLPg" alt="Juergen Law Laturisa">
@@ -415,12 +97,9 @@
             <p class="bio">Prospective Forensic Biology Specialist, Interested in Forensic Botany</p>
         </header>
 
-        <!-- Main Links -->
         <main class="links-container">
-            
             <div class="section-label">Academic & Experience</div>
             
-            <!-- Interactive Accordion for Multi-CV -->
             <div class="accordion-wrapper">
                 <input type="checkbox" id="cv-toggle" class="accordion-checkbox">
                 <label for="cv-toggle" class="accordion-trigger">
@@ -430,173 +109,53 @@
                     </div>
                     <span class="accordion-chevron">&gt;</span>
                 </label>
-                
                 <div class="accordion-content">
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.y8e6e79xatfx" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ Master CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.oryv9z5zycmz" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ Life Science CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.25m2j14tjge1" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ Programming CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.end3sxcleqlj" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ Finance CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.3e26gwwuv8tz" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ Hospitality CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Interactive Accordion for Publications -->
-            <div class="accordion-wrapper">
-                <input type="checkbox" id="pub-toggle" class="accordion-checkbox">
-                <label for="pub-toggle" class="accordion-trigger">
-                    <div class="link-info">
-                        <span class="link-title">Publications</span>
-                        <span class="link-desc">Preprint research papers and articles</span>
-                    </div>
-                    <span class="accordion-chevron">&gt;</span>
-                </label>
-                
-                <div class="accordion-content">
-                    <a href="https://doi.org/10.13140/RG.2.2.24691.28969" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ The Evolution of Forensic Plant DNA Profiling • Preprint</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.y8e6e79xatfx" class="sub-link-card" target="_blank">↳ Master CV</a>
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.oryv9z5zycmz" class="sub-link-card" target="_blank">↳ Life Science CV</a>
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.25m2j14tjge1" class="sub-link-card" target="_blank">↳ Programming CV</a>
                 </div>
             </div>
 
             <div class="section-label">Featured Projects</div>
-
-            <!-- ARGUS Dropdown -->
             <div class="accordion-wrapper">
                 <input type="checkbox" id="argus-toggle" class="accordion-checkbox">
-                <label for="argus-toggle" class="accordion-trigger highlight-trigger">
+                <label for="argus-toggle" class="accordion-trigger" style="border-color: rgba(52, 211, 153, 0.3);">
                     <div class="link-info">
                         <span class="link-title" style="color: var(--accent-green);">ARGUS</span>
                         <span class="link-desc">Accounting Report & GUidance System</span>
                     </div>
                     <span class="accordion-chevron">&gt;</span>
                 </label>
-                
                 <div class="accordion-content">
-                    <a href="https://github.com/JuergenLaw/financial-report-system" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ GitHub Repository</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://drive.google.com/drive/folders/1rrypquIKyJnfLiTLfyiRsz2lSqqh1W04?usp=sharing" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ System Templates</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://www.youtube.com/playlist?list=PLQUXJZ2hz1xhuX7t6MzdJn9GAsZx3u6Kl" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ System Guide</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
+                    <a href="https://github.com/JuergenLaw/financial-report-system" class="sub-link-card" target="_blank">↳ GitHub Repository</a>
                 </div>
             </div>
 
-            <!-- HORUS Dropdown -->
-            <div class="accordion-wrapper">
-                <input type="checkbox" id="horus-toggle" class="accordion-checkbox">
-                <label for="horus-toggle" class="accordion-trigger highlight-trigger">
-                    <div class="link-info">
-                        <span class="link-title" style="color: var(--accent-green);">HORUS</span>
-                        <span class="link-desc">Healthcare & Operational Reagent Upkeep System</span>
-                    </div>
-                    <span class="accordion-chevron">&gt;</span>
-                </label>
-                
-                <div class="accordion-content">
-                    <a href="https://github.com/JuergenLaw/HORUS" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ GitHub Repository</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://juergenlaw.github.io/HORUS/" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ System Site</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="#" class="sub-link-card" onclick="return false;">
-                        <span class="sub-link-title" style="color: var(--text-secondary);">↳ System Demo (Coming Soon)</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="section-label">Directory & Registries</div>
-            
-            <!-- Category 1: Professional & Social -->
-            <div class="grid-sub-label" style="color: var(--accent-blue);">// Professional & Social</div>
+            <div class="section-label">Directory</div>
             <div class="accounts-grid">
-                <a href="https://www.linkedin.com/in/juergen-law" class="account-button" target="_blank">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/>
-                    </svg>LinkedIn
-                </a>
-                <a href="https://www.instagram.com/laturisajuergen?igsh=MWpvZWl4endid2VsZw==" class="account-button" target="_blank">
-                    <img src="https://cdn.simpleicons.org/instagram" alt="">Instagram
-                </a>
+                <a href="https://www.linkedin.com/in/juergen-law" class="account-button" target="_blank">LinkedIn</a>
                 <div class="account-button" id="email-btn" onclick="copyEmail()">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                    </svg><span id="email-text">Email</span>
+                    <span id="email-text">Email</span>
                 </div>
             </div>
-
-            <!-- Category 2: Research & Registries -->
-            <div class="grid-sub-label" style="color: var(--accent-blue);">// Scientific Registries</div>
-            <div class="accounts-grid">
-                <a href="https://orcid.org/0009-0000-8070-2480" class="account-button" target="_blank">
-                    <img src="https://cdn.simpleicons.org/orcid" alt="">ORCID
-                </a>
-                <a href="https://www.researchgate.net/profile/Juergen-Laturisa?ev=hdr_xprf" class="account-button" target="_blank">
-                    <img src="https://cdn.simpleicons.org/researchgate" alt="">RG
-                </a>
-                <a href="https://osf.io/c57he/" class="account-button" target="_blank">
-                    <img src="https://cdn.simpleicons.org/osf" alt="">OSF
-                </a>
-            </div>
-
-            <!-- Category 3: Development -->
-            <div class="grid-sub-label" style="color: var(--accent-green);">// System Engineering</div>
-            <div class="accounts-grid eng-grid" style="margin-bottom: 0;">
-                <a href="https://github.com/juergenlaturisa" class="account-button" target="_blank">
-                    <img src="https://cdn.simpleicons.org/github" alt="">GitHub
-                </a>
-                <a href="https://devpost.com/juergenllaturisa?ref_content=user-portfolio&ref_feature=portfolio&ref_medium=global-nav" class="account-button" target="_blank">
-                    <img src="https://cdn.simpleicons.org/devpost" alt="">DevPost
-                </a>
-            </div>
-
         </main>
-
     </div>
 
-    <!-- Script for interactive Email Copy functionality -->
     <script>
+        document.body.addEventListener('mousemove', (e) => {
+            document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
+            document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
+        });
+
         function copyEmail() {
             const email = "juergenllaturisa@gmail.com";
             navigator.clipboard.writeText(email).then(() => {
                 const btnText = document.getElementById("email-text");
                 const originalText = btnText.innerText;
                 btnText.innerText = "Copied!";
-                btnText.style.color = "var(--accent-blue)";
-                
-                setTimeout(() => {
-                    btnText.innerText = originalText;
-                    btnText.style.color = "";
-                }, 2000);
-            }).catch(err => {
-                window.location.href = "mailto:" + email;
+                setTimeout(() => { btnText.innerText = originalText; }, 2000);
             });
         }
     </script>
-</f>
+</body>
 </html>
