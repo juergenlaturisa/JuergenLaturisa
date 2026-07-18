@@ -386,14 +386,7 @@
 }
     </style>
 </head>
-  <script>
-    // Tracks the mouse position and pipes it directly into the CSS background layer
-    document.body.addEventListener('mousemove', (e) => {
-        document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
-        document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
-    });
-</script>
-</body>
+  <body>
 
     <div class="container">
         
@@ -571,6 +564,20 @@
 
     </div>
 
+   <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const body = document.body;
+
+    body.addEventListener("mousemove", (e) => {
+        body.style.setProperty("--mouse-x", `${e.clientX}px`);
+        body.style.setProperty("--mouse-y", `${e.clientY}px`);
+    });
+
+    body.style.setProperty("--mouse-x", `${window.innerWidth / 2}px`);
+    body.style.setProperty("--mouse-y", `${window.innerHeight / 2}px`);
+});
+</script>
+    
     <!-- Script for interactive Email Copy functionality -->
     <script>
         function copyEmail() {
@@ -590,5 +597,5 @@
             });
         }
     </script>
-</f>
+</body>
 </html>
