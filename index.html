@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juergen Law Laturisa | Portfolio</title>
+    <title>Juergen Law Laturisa | Personal Website</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -120,11 +120,30 @@
             letter-spacing: 0.05em;
         }
 
-        .bio {
-            font-size: 0.92rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
+        .bio-container {
+    text-align: left; /* Aligns text like LinkedIn */
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.bio-heading {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.bio {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: justify;       
+    hyphens: auto;            
+    word-break: break-word;
+}
 
         /* Content Blocks / Links */
         .links-container {
@@ -385,6 +404,7 @@
         font-size: 0.75rem;
     }
 }
+
     </style>
 </head>
   <body>
@@ -393,13 +413,21 @@
         
         <!-- Profile Header -->
         <header class="profile">
-            <div class="avatar-container">
-                <img class="avatar" src="https://media.licdn.com/dms/image/v2/D5603AQHg5uhNE51ikg/profile-displayphoto-scale_400_400/B56Z6ZAF7TH0Ag-/0/1780683402540?e=1785974400&v=beta&t=SRF20rJZSCSEN0vIdJeR7lVWNapXg7Ndjjls54jzLPg" alt="Juergen Law Laturisa">
-            </div>
-            <h1 class="name">Juergen Law Laturisa</h1>
-            <div class="tagline">HBSc Forensic Science Student @ UofT Mississauga</div>
-            <p class="bio">Prospective Forensic Biology Specialist, Interested in Forensic Botany</p>
-        </header>
+    <div class="avatar-container">
+        <img class="avatar" src="https://media.licdn.com/dms/image/v2/D5603AQHg5uhNE51ikg/profile-displayphoto-scale_400_400/B56Z6ZAF7TH0Ag-/0/1780683402540?e=1785974400&v=beta&t=SRF20rJZSCSEN0vIdJeR7lVWNapXg7Ndjjls54jzLPg" alt="Juergen Law Laturisa">
+    </div>
+    <h1 class="name">Juergen Law Laturisa</h1>
+    <div class="tagline">HBSc Forensic Science Student @ UofT Mississauga</div>
+    
+    <!-- Professional Summary -->
+    <div class="bio-container">
+        <div class="bio-heading">About</div>
+        <p class="bio">
+            I'm an incoming HBSc student at the University of Toronto Mississauga pursuing Forensic Science with an intended specialization in Forensic Biology. Outside of academics, I enjoy playing Bloons TD 6 and collecting university-branded pens. Through independent research and software projects, I enjoy exploring how science and technology can contribute to forensic investigations. 
+
+        </p>
+    </div>
+</header>
 
         <!-- Main Links -->
         <main class="links-container">
@@ -490,33 +518,34 @@
             </div>
 
             <!-- HORUS Dropdown -->
-            <div class="accordion-wrapper">
-                <input type="checkbox" id="horus-toggle" class="accordion-checkbox">
-                <label for="horus-toggle" class="accordion-trigger highlight-trigger">
-                    <div class="link-info">
-                        <span class="link-title" style="color: var(--accent-green);">HORUS</span>
-                        <span class="link-desc">Healthcare & Operational Reagent Upkeep System</span>
-                    </div>
-                    <span class="accordion-chevron">&gt;</span>
-                </label>
-                
-                <div class="accordion-content">
-                    <a href="https://github.com/JuergenLaturisa/HORUS" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ GitHub Repository</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://juergenlaturisa.github.io/HORUS/" class="sub-link-card" target="_blank">
-                        <span class="sub-link-title">↳ System Site</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="#" class="sub-link-card" onclick="return false;">
-                        <span class="sub-link-title" style="color: var(--text-secondary);">↳ System Demo (Coming Soon)</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                </div>
-            </div>
+<div class="accordion-wrapper">
+    <input type="checkbox" id="horus-toggle" class="accordion-checkbox">
+    <label for="horus-toggle" class="accordion-trigger highlight-trigger">
+        <div class="link-info">
+            <span class="link-title" style="color: var(--accent-green);">HORUS</span>
+            <span class="link-desc">Healthcare & Operational Reagent Upkeep System</span>
+        </div>
+        <span class="accordion-chevron">&gt;</span>
+    </label>
+    
+    <div class="accordion-content">
+        <a href="https://github.com/JuergenLaturisa/HORUS" class="sub-link-card" target="_blank">
+            <span class="sub-link-title">↳ GitHub Repository</span>
+            <span class="link-arrow">-&gt;</span>
+        </a>
+        <a href="https://juergenlaturisa.github.io/HORUS/" class="sub-link-card" target="_blank">
+            <span class="sub-link-title">↳ System Site</span>
+            <span class="link-arrow">-&gt;</span>
+        </a>
+        <!-- Updated Demo Link -->
+        <a href="https://www.youtube.com/watch?v=rJtlw1ltLvc" class="sub-link-card" target="_blank">
+            <span class="sub-link-title">↳ System Demo</span>
+            <span class="link-arrow">-&gt;</span>
+        </a>
+    </div>
+</div>
 
-            <div class="section-label">Directory & Registries</div>
+            <div class="section-label">Profiles</div>
             
             <!-- Category 1: Professional & Social -->
             <div class="grid-sub-label" style="color: var(--accent-blue);">// Professional & Social</div>
@@ -526,8 +555,8 @@
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/>
                     </svg>LinkedIn
                 </a>
-                <a href="https://www.instagram.com/laturisajuergen?igsh=MWpvZWl4endid2VsZw==" class="account-button" target="_blank">
-                    <img src="https://cdn.simpleicons.org/instagram" alt="">Instagram
+                <a href="https://www.youtube.com/@JuergenLaw" class="account-button" target="_blank">
+                    <img src="https://cdn.simpleicons.org/youtube" alt="">Youtube
                 </a>
                 <div class="account-button" id="email-btn" onclick="copyEmail()">
                     <svg viewBox="0 0 24 24">
