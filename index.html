@@ -26,7 +26,6 @@
             padding: 0;
         }
 
-        /* --- Custom Cursor Styles --- */
         @media (hover: hover) and (pointer: fine) {
             body, a, button, label, input, .account-button, .sub-link-card, .accordion-trigger {
                 cursor: none !important;
@@ -63,11 +62,40 @@
                 gap: 32px;
                 transform: translate(-50%, -50%) scale(1.15);
             }
+
+            .hover-preview {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 220px;
+                height: 125px;
+                border-radius: 8px;
+                overflow: hidden;
+                border: 1px solid var(--accent-green);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(52, 211, 153, 0.25);
+                pointer-events: none;
+                z-index: 9998;
+                opacity: 0;
+                transform: translate(-50%, -125%) scale(0.85);
+                transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+                background: var(--card-bg);
+            }
+
+            .hover-preview.active {
+                opacity: 1;
+                transform: translate(-50%, -125%) scale(1);
+            }
+
+            .hover-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
         }
 
-        /* Hide elements on mobile touch screens */
         @media (hover: none), (pointer: coarse) {
-            .cursor-brackets, .cursor-dot {
+            .cursor-brackets, .cursor-dot, .hover-preview {
                 display: none !important;
             }
         }
@@ -108,7 +136,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* Profile Section */
         .profile { text-align: center; margin-bottom: 1.5rem; }
 
         .avatar-container {
@@ -175,12 +202,11 @@
             font-size: 0.9rem;
             color: var(--text-secondary);
             line-height: 1.6;
-            text-align: justify;       
-            hyphens: auto;            
+            text-align: justify;        
+            hyphens: auto;             
             word-break: break-word;
         }
 
-        /* Content Blocks / Links */
         .links-container {
             display: flex;
             flex-direction: column;
@@ -218,7 +244,6 @@
             margin-top: 0.2rem;
         }
 
-        /* Accordion Wrapper */
         .accordion-wrapper {
             display: flex;
             flex-direction: column;
@@ -339,7 +364,6 @@
         
         .highlight-trigger:hover .link-arrow { color: var(--accent-green); }
 
-        /* Accounts Grid with SVG icons */
         .accounts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
@@ -415,15 +439,17 @@
 </head>
 <body>
 
-    <!-- Custom Cursor Markup -->
     <div class="cursor-brackets" id="brackets">
         <span>{</span>
         <span>}</span>
     </div>
     <div class="cursor-dot" id="dot">•</div>
 
+    <div class="hover-preview" id="hover-preview">
+        <img id="preview-img" src="" alt="Project Preview">
+    </div>
+
     <div class="container">
-        <!-- Profile Header -->
         <header class="profile">
             <div class="avatar-container">
                 <img class="avatar" src="https://media.licdn.com/dms/image/v2/D5603AQHg5uhNE51ikg/profile-displayphoto-scale_400_400/B56Z6ZAF7TH0Ag-/0/1780683402540?e=1785974400&v=beta&t=SRF20rJZSCSEN0vIdJeR7lVWNapXg7Ndjjls54jzLPg" alt="Juergen Law Laturisa">
@@ -439,7 +465,6 @@
             </div>
         </header>
 
-        <!-- Main Links -->
         <main class="links-container">
             <div class="section-label">Academic & Experience</div>
             
@@ -499,7 +524,7 @@
 
             <div class="accordion-wrapper">
                 <input type="checkbox" id="argus-toggle" class="accordion-checkbox">
-                <label for="argus-toggle" class="accordion-trigger highlight-trigger">
+                <label for="argus-toggle" class="accordion-trigger highlight-trigger" data-preview="https://media.licdn.com/dms/image/v2/D5622AQGl9kun2Y40mw/feedshare-image-high-res/B56Z7hVsJTGsAc-/0/1781897020224?e=1786579200&v=beta&t=BBRgYSpA6mXOMCVwjocvC_NB2pRfXNq-feCBSNp3WMw">
                     <div class="link-info">
                         <span class="link-title" style="color: var(--accent-green);">ARGUS</span>
                         <span class="link-desc">Accounting Report & GUidance System</span>
@@ -525,7 +550,7 @@
 
             <div class="accordion-wrapper">
                 <input type="checkbox" id="horus-toggle" class="accordion-checkbox">
-                <label for="horus-toggle" class="accordion-trigger highlight-trigger">
+                <label for="horus-toggle" class="accordion-trigger highlight-trigger" data-preview="https://media.licdn.com/dms/image/v2/D562DAQFtu-auK0q-bw/profile-treasury-image-shrink_1280_1280/B56Z8yc3hxGoAc-/0/1783257856546?e=1785589200&v=beta&t=1Me_IMlOKQTBo84Hp-oGJ7WuqggF28c9LMKDq9TMEoY">
                     <div class="link-info">
                         <span class="link-title" style="color: var(--accent-green);">HORUS</span>
                         <span class="link-desc">Healthcare & Operational Reagent Upkeep System</span>
@@ -598,14 +623,16 @@
             const body = document.body;
             const brackets = document.getElementById('brackets');
             const dot = document.getElementById('dot');
+            const previewEl = document.getElementById('hover-preview');
+            const previewImg = document.getElementById('preview-img');
 
             let mouseX = window.innerWidth / 2;
             let mouseY = window.innerHeight / 2;
 
             let dotX = mouseX, dotY = mouseY;
             let bracketsX = mouseX, bracketsY = mouseY;
+            let previewX = mouseX, previewY = mouseY;
 
-            // Track mouse positions for background gradient & custom cursor
             body.addEventListener("mousemove", (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
@@ -614,12 +641,10 @@
                 body.style.setProperty("--mouse-y", `${mouseY}px`);
             });
 
-            // Linear Interpolation helper
             function lerp(start, end, amt) {
                 return (1 - amt) * start + amt * end;
             }
 
-            // Animation Loop
             function render() {
                 dotX = lerp(dotX, mouseX, 0.22);
                 dotY = lerp(dotY, mouseY, 0.22);
@@ -631,21 +656,38 @@
                 brackets.style.left = `${bracketsX}px`;
                 brackets.style.top = `${bracketsY}px`;
 
+                previewX = lerp(previewX, mouseX, 0.12);
+                previewY = lerp(previewY, mouseY, 0.12);
+                previewEl.style.left = `${previewX}px`;
+                previewEl.style.top = `${previewY}px`;
+
                 requestAnimationFrame(render);
             }
 
             render();
 
-            // Hover state handler via event delegation
             document.addEventListener('mouseover', (e) => {
                 if (e.target.closest('a, button, label, .account-button, .sub-link-card, .accordion-trigger')) {
                     brackets.classList.add('hovered');
+                }
+
+                const previewTarget = e.target.closest('[data-preview]');
+                if (previewTarget) {
+                    const imgSrc = previewTarget.getAttribute('data-preview');
+                    if (imgSrc) {
+                        previewImg.src = imgSrc;
+                        previewEl.classList.add('active');
+                    }
                 }
             });
 
             document.addEventListener('mouseout', (e) => {
                 if (e.target.closest('a, button, label, .account-button, .sub-link-card, .accordion-trigger')) {
                     brackets.classList.remove('hovered');
+                }
+
+                if (e.target.closest('[data-preview]')) {
+                    previewEl.classList.remove('active');
                 }
             });
         });
