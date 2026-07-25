@@ -960,34 +960,37 @@
           width: 100%;
           max-width: 500px;
           margin: 0 auto;
-          gap: 2rem;
+          gap: 1.5rem;
       }
       
       .pie-chart {
-          width: 320px;
-          height: 320px;
+          width: 280px;
+          height: 280px;
           overflow: visible;
       }
       
       .pie-group {
           cursor: pointer;
-          transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.25s ease;
+          transition:
+              transform 0.2s ease,
+              filter 0.2s ease;
           transform-origin: 100px 100px;
       }
       
       .pie-group:hover {
-          transform: scale(1.08);
-          filter: drop-shadow(0px 8px 16px rgba(0, 255, 102, 0.25));
+          transform: scale(1.04);
+          filter: drop-shadow(0 4px 8px rgba(0, 240, 255, 0.18));
       }
       
       .pie-group:hover .pie-slice {
-          stroke: #00ff66;
+          stroke: var(--accent-cyan, #00f0ff);
+          stroke-width: 1.5;
       }
       
       .slice-text-icon {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          font-weight: bold;
+          font-size: 9px;
+          font-weight: 600;
           pointer-events: none;
       }
       
@@ -997,15 +1000,15 @@
       
       .slice-label-box {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 0.9rem;
-          color: var(--accent-green, #00ff66);
-          background: rgba(13, 17, 23, 0.9);
-          border: 1px solid rgba(0, 255, 102, 0.3);
-          padding: 0.75rem 1.5rem;
-          border-radius: 6px;
+          font-size: 0.8rem;
+          color: var(--accent-cyan, #00f0ff);
+          background: rgba(13, 17, 23, 0.7);
+          border: 1px solid rgba(0, 240, 255, 0.25);
+          padding: 0.6rem 1.25rem;
+          border-radius: 5px;
           text-align: center;
-          min-width: 260px;
-          box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+          min-width: 230px;
+          box-shadow: none;
       }
       
       .hover-preview {
@@ -1016,15 +1019,14 @@
       }
       
       #view-profiles {
-          display: flex;
           flex-direction: column;
           align-items: center;
           width: 100%;
       }
       
-      
-      
-      
+      #view-profiles.active-view {
+          display: flex;
+      }
     
 </style>
 </head>
@@ -1335,8 +1337,7 @@
             <a href="#home" class="back-nav">&lt;- Back to Home</a>
             
             <div class="page-header center-header">
-                <h2 class="page-title">Digital Identity Matrix</h2>
-                <p class="page-desc">// Platform activity distribution &amp; verified registries</p>
+                <h2 class="page-title">Profiles</h2>
             </div>
         
             <div class="pie-container">
