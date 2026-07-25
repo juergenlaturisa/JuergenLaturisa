@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juergen Law Laturisa | Personal Website</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!--
+        Maintenance note:
+        Keep page-specific styles grouped below and keep DOM-dependent JavaScript
+        inside DOMContentLoaded. Avoid emergency !important overrides unless
+        they are truly necessary.
+    -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f1622;
+            --card-bg: #131a26;
+            --border-color: #222f47;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #34d399;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            body, a, button, label, input, .account-button, .sub-link-card, .nav-card {
+                cursor: none !important;
+            }
+
+            .cursor-brackets, .cursor-dot {
+                position: fixed;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+                color: var(--accent-blue);
+                font-weight: bold;
+                font-family: 'JetBrains Mono', monospace;
+                user-select: none;
+                z-index: 9999;
+                text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+            }
+
+            .cursor-dot {
+                font-size: 24px;
+                line-height: 1;
+            }
+
+            .cursor-brackets {
+                font-size: 28px;
+                line-height: 1;
+                display: flex;
+                gap: 12px;
+                transition: gap 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            }
+
+            .cursor-brackets.hovered {
+                gap: 32px;
+                transform: translate(-50%, -50%) scale(1.15);
+            }
+
+            .hover-preview {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 220px;
+                height: 125px;
+                border-radius: 8px;
+                overflow: hidden;
+                border: 1px solid var(--accent-green);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(52, 211, 153, 0.25);
+                pointer-events: none;
+                z-index: 9998;
+                opacity: 0;
+                visibility: hidden;
+                transform: translate(-50%, -125%) scale(0.85);
+                transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.25s ease;
+                background: var(--card-bg);
+            }
+
+            .hover-preview.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translate(-50%, -125%) scale(1);
+            }
+
+            .hover-preview img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
+
+        @media (hover: none), (pointer: coarse) {
+            .cursor-brackets, .cursor-dot, .hover-preview {
+                display: none !important;
+            }
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            background-image: 
+                radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.12), transparent 40%),
+                linear-gradient(135deg, rgba(56, 189, 248, 0.08) 25%, transparent 25%, transparent 50%, rgba(56, 189, 248, 0.08) 50%, rgba(56, 189, 248, 0.08) 75%, transparent 75%, transparent),
+                linear-gradient(180deg, #0b0f17 0%, #111a2e 50%, #0b0f17 100%);
+            background-size: 100% 100%, 160px 160px, 100% 100%;
+            background-attachment: fixed;
+            animation: backgroundCycle 25s linear infinite;
+        }
+
+        @keyframes backgroundCycle {
+            0% { background-position: center, 0px 0px, center; }
+            100% { background-position: center, 160px 160px, center; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 540px;
+            background: rgba(19, 26, 38, 0.95);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: max-width 0.3s ease;
+        }
+
+        .view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .view.active-view {
+            display: block;
+            opacity: 1;
+        }
+
+        .profile { text-align: center; margin-bottom: 1.5rem; }
+
+        .avatar-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);
+            background: #1e293b;
+        }
+
+        .avatar-container::before, .avatar-container::after {
+            content: '';
+            position: absolute;
+            border: 1px solid var(--accent-blue);
+            width: 12px;
+            height: 12px;
+            transition: all 0.3s ease;
+        }
+        .avatar-container::before { top: -4px; left: -4px; border-right: none; border-bottom: none; }
+        .avatar-container::after { bottom: -4px; right: -4px; border-left: none; border-top: none; }
+
+        .name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bio-container {
+            text-align: left;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .bio-heading {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .bio {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            text-align: justify;         
+            hyphens: auto;             
+            word-break: break-word;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .grid-sub-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            line-height: 1;
+            text-transform: uppercase;
+            margin-top: 0.2rem;
+        }
+
+        .nav-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-card:hover {
+            background: rgba(56, 189, 248, 0.06);
+            border-color: var(--accent-blue);
+        }
+
+        .highlight-card { border-color: rgba(52, 211, 153, 0.3); }
+        .highlight-card:hover {
+            border-color: var(--accent-green);
+            background: rgba(52, 211, 153, 0.06);
+        }
+
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
+        }
+        .back-nav:hover {
+            transform: translateX(-4px);
+        }
+
+        .page-header {
+            margin-bottom: 1.25rem;
+        }
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .page-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sub-link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            background: rgba(19, 26, 38, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub-link-card:hover {
+            border-color: var(--text-secondary);
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        .link-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            max-width: 85%;
+        }
+
+        .link-title { font-size: 0.95rem; font-weight: 500; }
+        .sub-link-title {
+            font-size: 0.88rem;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.4;
+        }
+
+        .link-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        .link-arrow {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+
+        .nav-card:hover .link-arrow, .sub-link-card:hover .link-arrow {
+            color: var(--accent-blue);
+            transform: translateX(4px);
+        }
+        
+        .highlight-card:hover .link-arrow { color: var(--accent-green); }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+            gap: 0.6rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .account-button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.5rem;
+            padding: 0.65rem 0.75rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .account-button img,
+        .account-button svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .account-button img {
+            filter: invert(71%) sepia(13%) saturate(543%) hue-rotate(176deg) brightness(89%) contrast(89%);
+        }
+
+        .account-button svg { fill: var(--text-secondary); }
+
+        .account-button:hover {
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.03);
+        }
+
+        .account-button:hover img {
+            filter: invert(68%) sepia(84%) saturate(1915%) hue-rotate(174deg) brightness(101%) contrast(98%);
+        }
+
+        .account-button:hover svg { fill: var(--accent-blue); }
+
+        .eng-grid .account-button:hover {
+            border-color: var(--accent-green);
+            background: rgba(52, 211, 153, 0.03);
+        }
+        .eng-grid .account-button:hover img {
+            filter: invert(70%) sepia(91%) saturate(362%) hue-rotate(106deg) brightness(93%) contrast(89%);
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 2rem 1.25rem; }
+            .name { font-size: 1.3rem; }
+            .tagline { font-size: 0.78rem; }
+            .accounts-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 0.5rem;
+            }
+            .account-button {
+                padding: 0.55rem 0.65rem;
+                font-size: 0.75rem;
+            }
+        }
+
+
+        .container:has(#view-cv.active-view) {
+            max-width: 900px;
+        }
+
+        .cv-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .cv-doc-container {
+            width: 100%;
+            height: 600px; 
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cv-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+        }
+
+        .cv-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .highlight-box {
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .highlight-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .highlight-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .highlight-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .highlight-list li::before {
+            content: "• ";
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .doc-external-link {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            text-decoration: none;
+            margin-top: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .doc-external-link:hover {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+
+        .cv-alternative-section {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .alt-links-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .alt-link-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--accent-green);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            background: rgba(52, 211, 153, 0.05);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .alt-link-card:hover {
+            border-color: var(--accent-green);
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .alt-link-title {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .alt-link-icon {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .cv-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cv-doc-container {
+                height: 380px;
+            }
+
+            .alt-links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pub-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+        
+        .pub-filter-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        
+        .pub-filter-btn.active, .pub-filter-btn:hover {
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.08);
+        }
+        
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .pub-card {
+            background: rgba(19, 26, 38, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        
+        .featured-pub {
+            border-color: rgba(56, 189, 248, 0.25);
+        }
+        
+        .placeholder-pub {
+            opacity: 0.7;
+            border-style: dashed;
+        }
+        
+        .pub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pub-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .preprint-badge {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        
+        .review-badge {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+        
+        .pub-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .pub-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+        
+        .pub-authors {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+        
+        .pub-authors strong {
+            color: var(--accent-blue);
+        }
+        
+        .pub-abstract {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .pub-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.4rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .pub-doi-link {
+            color: var(--accent-green);
+            text-decoration: none;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            background: rgba(52, 211, 153, 0.06);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .pub-doi-link:hover {
+            background: rgba(52, 211, 153, 0.15);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+        
+        .pub-venue {
+            color: var(--text-secondary);
+        }
+
+      /* ================= SHOWCASE PROJECTS ================= */
+      .projects-list {
+          display: flex;
+          flex-direction: column;
+          gap: 4rem;
+          margin-top: 2rem;
+      }
+      
+      .project-showcase {
+          background: rgba(13, 17, 23, 0.7);
+          border: 1px solid rgba(0, 255, 102, 0.2);
+          border-radius: 8px;
+          padding: 2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          transition: border-color 0.3s ease;
+      }
+      
+      .project-showcase:hover {
+          border-color: rgba(0, 255, 102, 0.4);
+      }
+      
+      .project-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          flex-wrap: wrap;
+          gap: 1rem;
+      }
+      
+      .project-type-badge {
+          font-size: 0.75rem;
+          font-family: 'JetBrains Mono', monospace;
+          text-transform: uppercase;
+          color: #00ff66;
+          letter-spacing: 1px;
+      }
+      
+      .project-type-badge.health-badge {
+          color: #00f0ff;
+      }
+      
+      .project-name {
+          font-size: 1.8rem;
+          margin: 0.2rem 0;
+          color: #ffffff;
+      }
+      
+      .project-tagline {
+          font-size: 0.95rem;
+          color: #8b949e;
+          margin: 0;
+      }
+      
+      .project-links {
+          display: flex;
+          gap: 0.75rem;
+      }
+      
+      .project-btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.85rem;
+          font-family: 'JetBrains Mono', monospace;
+          text-decoration: none;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+      }
+      
+      .primary-btn {
+          background: #00ff66;
+          color: #0d1117;
+          font-weight: bold;
+      }
+      
+      .primary-btn:hover {
+          background: #33ff85;
+          box-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+      }
+      
+      .secondary-btn {
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #c9d1d9;
+      }
+      
+      .secondary-btn:hover {
+          border-color: #00ff66;
+          color: #00ff66;
+      }
+      
+      .project-preview-container {
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 6px;
+          overflow: hidden;
+          background: #090d13;
+      }
+      
+      .browser-bar {
+          background: #161b22;
+          padding: 0.5rem 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+      }
+      
+      .dot.red { background: #ff5f56; }
+      .dot.yellow { background: #ffbd2e; }
+      .dot.green { background: #27c93f; }
+      
+      .browser-title {
+          margin-left: auto;
+          font-size: 0.75rem;
+          font-family: 'JetBrains Mono', monospace;
+          color: #6e7681;
+      }
+      
+      .project-img {
+          width: 100%;
+          height: auto;
+          display: block;
+          object-fit: cover;
+      }
+      
+      .project-body {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 2rem;
+          margin-top: 1rem;
+      }
+      
+      @media (max-width: 768px) {
+          .project-body {
+              grid-template-columns: 1fr;
+          }
+      }
+      
+      .project-description h4, .meta-block h4 {
+          font-size: 0.85rem;
+          color: #8b949e;
+          font-family: 'JetBrains Mono', monospace;
+          margin-bottom: 0.75rem;
+      }
+      
+      .project-description p {
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: #c9d1d9;
+          margin-bottom: 1rem;
+      }
+      
+      .tech-tags {
+          list-style: none;
+          padding: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+      }
+      
+      .tech-tags li {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          font-size: 0.75rem;
+          font-family: 'JetBrains Mono', monospace;
+          padding: 0.25rem 0.6rem;
+          border-radius: 4px;
+          color: #58a6ff;
+      }
+      
+      .feature-list {
+          padding-left: 1.2rem;
+          color: #c9d1d9;
+          font-size: 0.9rem;
+      }
+      
+      .feature-list li {
+          margin-bottom: 0.4rem;
+      }
+      
+      .profiles-banner-card {
+          margin-top: 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 1rem 1.5rem;
+          background: rgba(52, 211, 153, 0.04);
+          border: 1px solid rgba(52, 211, 153, 0.3);
+          border-radius: 8px;
+          text-decoration: none;
+          font-size: 1.05rem;
+          font-weight: 600;
+          color: var(--accent-green);
+          font-family: 'JetBrains Mono', monospace;
+          transition: all 0.25s ease;
+          box-shadow: 0 0 15px rgba(52, 211, 153, 0.05);
+      }
+      
+      .profiles-banner-card:hover {
+          background: rgba(52, 211, 153, 0.1);
+          border-color: var(--accent-green);
+          transform: translateY(-2px);
+          box-shadow: 0 0 20px rgba(52, 211, 153, 0.2);
+      }
+      
+
+      
+      #view-profiles .back-nav {
+          align-self: flex-start;
+      }
+      
+      .center-header {
+          text-align: center;
+          width: 100%;
+          margin-bottom: 1.5rem;
+      }
+      
+      .pie-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          max-width: 500px;
+          margin: 0 auto;
+          gap: 2rem;
+      }
+      
+      .pie-chart {
+          width: 320px;
+          height: 320px;
+          overflow: visible;
+      }
+      
+      .pie-group {
+          cursor: pointer;
+          transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.25s ease;
+          transform-origin: 100px 100px;
+      }
+      
+      .pie-group:hover {
+          transform: scale(1.08);
+          filter: drop-shadow(0px 8px 16px rgba(0, 255, 102, 0.25));
+      }
+      
+      .pie-group:hover .pie-slice {
+          stroke: #00ff66;
+      }
+      
+      .slice-text-icon {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          font-weight: bold;
+          pointer-events: none;
+      }
+      
+      .slice-icon {
+          pointer-events: none;
+      }
+      
+      .slice-label-box {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.9rem;
+          color: var(--accent-green, #00ff66);
+          background: rgba(13, 17, 23, 0.9);
+          border: 1px solid rgba(0, 255, 102, 0.3);
+          padding: 0.75rem 1.5rem;
+          border-radius: 6px;
+          text-align: center;
+          min-width: 260px;
+          box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      }
+      
+      .hover-preview {
+          position: fixed !important;
+          top: -9999px !important;
+          left: -9999px !important;
+          pointer-events: none !important;
+      }
+      
+      #view-profiles {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+      }
+      
+      
+      
+      
+    
+</style>
+</head>
+  
+<body>
+    <div class="cursor-brackets" id="brackets">
+        <span>{</span>
+        <span>}</span>
+    </div>
+    <div class="cursor-dot" id="dot">•</div>
+
+    <div class="hover-preview" id="hover-preview">
+        <img id="preview-img" src="" alt="Project Preview">
+    </div>
+
+    <div class="container">
+        <!-- ================= HOME VIEW ================= -->
+        <section id="view-home" class="view active-view">
+            <header class="profile">
+                <div class="avatar-container">
+                    <img class="avatar" src="https://media.licdn.com/dms/image/v2/D5603AQHg5uhNE51ikg/profile-displayphoto-scale_400_400/B56Z6ZAF7TH0Ag-/0/1780683402540?e=1785974400&amp;v=beta&amp;t=SRF20rJZSCSEN0vIdJeR7lVWNapXg7Ndjjls54jzLPg" alt="Juergen Law Laturisa">
+                </div>
+                <h1 class="name">Juergen Law Laturisa</h1>
+                <div class="tagline">HBSc Forensic Science Student @ UofT Mississauga</div>
+                
+                <div class="bio-container">
+                    <div class="bio-heading">About</div>
+                    <p class="bio">
+                        I'm an incoming HBSc student at the University of Toronto Mississauga pursuing Forensic Science with an intended specialization in Forensic Biology. Outside of academics, I enjoy playing Bloons TD 6 and collecting university-branded pens. Through independent research and software projects, I enjoy exploring how science and technology can contribute to forensic investigations.
+                    </p>
+                </div>
+            </header>
+
+            <main class="links-container">
+                <div class="section-label">Academic &amp; Experience</div>
+                
+                <a href="#cv" class="nav-card">
+                    <div class="link-info">
+                        <span class="link-title">Curriculum Vitae</span>
+                        <span class="link-desc">Highlights of my best achievements in Life Science</span>
+                    </div>
+                    <span class="link-arrow">-&gt;</span>
+                </a>
+
+                <a href="#publications" class="nav-card">
+                    <div class="link-info">
+                        <span class="link-title">Publications</span>
+                        <span class="link-desc">Preprints, Articles, and similar publications</span>
+                    </div>
+                    <span class="link-arrow">-&gt;</span>
+                </a>
+                
+                <a href="#projects" class="nav-card">
+                    <div class="link-info">
+                        <span class="link-title">Featured Projects</span>
+                        <span class="link-desc">Selected projects in science and technology</span>
+                    </div> 
+                    <span class="link-arrow">-&gt;</span>
+                </a>
+
+                <!-- FULL-WIDTH ACCENT BANNER FOR PROFILES -->
+                <a href="#profiles" class="profiles-banner-card">
+                    <span>Profiles</span>
+                </a>
+            </main>
+        </section>
+
+        <!-- ================= CV SUB-PAGE VIEW ================= -->
+        <section id="view-cv" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
+            
+            <div class="page-header">
+                <h2 class="page-title">Curriculum Vitae</h2>
+                <p class="page-desc">// A highlight of my best achievements in Life Science</p>
+            </div>
+
+            <!-- Two-Column Layout: Left = Embedded Doc, Right = Highlights -->
+            <div class="cv-layout">
+                <!-- Left: Embedded Google Doc Preview -->
+                <div class="cv-doc-container">
+                    <img 
+                        src="https://media.licdn.com/dms/image/v2/D562DAQG83j_yZ91hEg/profile-treasury-document-images_1280/B56Z.ZyzsgHIAg-/1/1784991661562?e=1785974400&v=beta&t=uymtapIrPNKsS-WL7JfXUMMY-EE6IU0ZIJxgMoYMxto" 
+                        alt="Life Science CV" 
+                        class="cv-img"
+                    />
+                </div>
+
+                <!-- Right: Highlights Panel -->
+                <div class="cv-highlights">
+                    <div class="highlight-box">
+                        <div class="highlight-title"> Program of Study (Intended)</div>
+                        <p class="highlight-text">Forensic Science (Biology Specialization) @ University of Toronto Mississauga.</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">Highlights</div>
+                        <ul class="highlight-list">
+                            <li>Awarded the International Scholar Award worth up to CAD 180,000 over four years.</li>
+                            <li>Wrote an independent forensic-botany paper, currently under review at <i>Science & Justice</i>.</li>
+                            <li>Selected as 1 of 3 final-year students for an Advanced Biology Enrichment Group.</li>
+                            <li>Organized hands-on science outreach for 100+ elementary students.</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">Full Document</div>
+                        <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.oryv9z5zycmz" target="_blank" rel="noopener noreferrer" class="doc-external-link">
+                            Life Science ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Redirects Section -->
+            <div class="cv-alternative-section">
+                <div class="section-label">Looking for something else?</div>
+                <div class="alt-links-grid">
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.25m2j14tjge1" class="alt-link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="alt-link-title">Programming</span>
+                        <span class="alt-link-icon">↗</span>
+                    </a>
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.end3sxcleqlj" class="alt-link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="alt-link-title">Business & Finance</span>
+                        <span class="alt-link-icon">↗</span>
+                    </a>
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.3e26gwwuv8tz" class="alt-link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="alt-link-title">Hospitality</span>
+                        <span class="alt-link-icon">↗</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PUBLICATIONS SUB-PAGE VIEW ================= -->
+        <section id="view-publications" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
+            
+            <div class="page-header">
+                <h2 class="page-title">Publications</h2>
+                <p class="page-desc">// Preprints, Articles, and similar publications</p>
+            </div>
+        
+            <!-- 1. Add "data-filter" to these buttons -->
+            <div class="pub-filters">
+                <button class="pub-filter-btn active" data-filter="all">All (1)</button>
+                <button class="pub-filter-btn" data-filter="preprint">Preprints</button>
+            </div>
+        
+            <div class="publications-list">
+                
+                <!-- 2. Add "data-category" to the article -->
+                <article class="pub-card featured-pub" data-category="preprint" data-preview="https://media.licdn.com/dms/image/v2/D562DAQHTfCJ7-2LksA/profile-treasury-image-shrink_480_480/B56Z.AVFR.GsAY-/0/1784564438597?e=1785600000&v=beta&t=S8DgQlxe0MdK_PgE2MjKFGu17YlaRl2eKlqBskAGnJ4">
+                    <div class="pub-header">
+                        <span class="pub-badge preprint-badge">Preprint</span>
+                        <span class="pub-year">2026</span>
+                    </div>
+        
+                    <h3 class="pub-title">Re-evaluating RAPD-Based Plant DNA Evidence from the 1992 Maricopa Homicide Investigation: A Modern Reassessment of the First Court-Accepted Molecular Botanical Evidence</h3>
+                    
+                    <p class="pub-authors">
+                        <strong>Laturisa J.L.</strong>
+                    </p>
+        
+                    <p class="pub-abstract">
+            This study re-examines the Blue Palo Verde (<i>Parkinsonia florida</i>) seed pod evidence by reassessing its statistical weight using modern population genetics principles and evaluating its admissibility under the transition from the <i>Frye</i> to the <i>Daubert</i> standard.
+        </p>
+                  
+        <p class="pub-abstract">
+                Currently under review at <i>Science & Justice</i>.
+            </p>
+        
+        <div class="pub-footer">
+            <a href="https://doi.org/10.13140/RG.2.2.24691.28969" target="_blank" rel="noopener noreferrer" class="pub-doi-link">
+                DOI: 10.13140/RG.2.2.24691.28969 ↗
+            </a>
+            <span class="pub-venue">ResearchGate</span>
+        </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ================= FEATURED PROJECTS SUB-PAGE VIEW ================= -->
+        <section id="view-projects" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
+            
+            <div class="page-header">
+                <h2 class="page-title">Featured Projects</h2>
+                <p class="page-desc">// Selected projects in science and technology</p>
+            </div>
+        
+            <div class="projects-list">
+        
+                <!-- ================= PROJECT 1: ARGUS ================= -->
+                <article class="project-showcase">
+                    <!-- Header Section -->
+                    <div class="project-header">
+                        <div class="project-title-group">
+                            <span class="project-type-badge">Financial Engineering & Automation</span>
+                            <h3 class="project-name">ARGUS</h3>
+                            <p class="project-tagline">Accounting Report & GUidance System</p>
+                        </div>
+                        
+                        <div class="project-links">
+                            <a href="https://drive.google.com/drive/folders/1rrypquIKyJnfLiTLfyiRsz2lSqqh1W04?usp=sharing" target="_blank" rel="noopener noreferrer" class="project-btn primary-btn">System Templates ↗</a>
+                            <a href="https://www.youtube.com/playlist?list=PLQUXJZ2hz1xhuX7t6MzdJn9GAsZx3u6Kl" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">System Guide ↗</a>
+                            <a href="https://github.com/JuergenLaw/financial-report-system" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">GitHub Repo ↗</a>
+                        </div>
+                    </div>
+        
+                    <!-- Visual Preview Frame -->
+                    <div class="project-preview-container">
+                        <div class="browser-bar">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="browser-title">argus // financial-dashboard</span>
+                        </div>
+                        <div class="preview-content">
+                            <img src="https://media.licdn.com/dms/image/v2/D5622AQGl9kun2Y40mw/feedshare-image-high-res/B56Z7hVsJTGsAc-/0/1781897020224?e=1786579200&v=beta&t=BBRgYSpA6mXOMCVwjocvC_NB2pRfXNq-feCBSNp3WMw" alt="ARGUS System Preview" class="project-img" />
+                        </div>
+                    </div>
+        
+                    <!-- Deep Dive Content -->
+                    <div class="project-body">
+                        <div class="project-description">
+                            <h4>// Overview</h4>
+                            <p>
+                                A personal accounting system designed to monitor, analyze, and report financial activity through automated journals, ledgers, financial statements, and long-term financial planning tools.
+                            </p>
+                        </div>
+        
+                        <div class="project-meta">
+                            <div class="meta-block">
+                                <h4>// Tech Stack</h4>
+                                <ul class="tech-tags">
+                                    <li>Google Apps Script</li>
+                                    <li>HTML5</li>
+                                    <li>CSS3</li>
+                                    <li>JavaScript (ES6)</li>
+                                    <li>Google Sheets</li>
+                                    <li>SpreadsheetApp</li>
+                                    <li>HtmlService</li>
+                                    <li>Git</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+        
+                <!-- ================= PROJECT 2: HORUS ================= -->
+                <article class="project-showcase">
+                    <!-- Header Section -->
+                    <div class="project-header">
+                        <div class="project-title-group">
+                            <span class="project-type-badge health-badge">HealthTech & Cold-Chain Compliance</span>
+                            <h3 class="project-name">HORUS</h3>
+                            <p class="project-tagline">Healthcare & Operational Reagent Upkeep System</p>
+                        </div>
+                        
+                        <div class="project-links">
+                            <a href="https://juergenlaturisa.github.io/HORUS/" target="_blank" rel="noopener noreferrer" class="project-btn primary-btn">Live System ↗</a>
+                            <a href="https://www.youtube.com/watch?v=rJtlw1ltLvc" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">Video Demo ↗</a>
+                            <a href="https://github.com/JuergenLaturisa/HORUS" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">GitHub Repo ↗</a>
+                        </div>
+                    </div>
+        
+                    <!-- Visual Preview Frame -->
+                    <div class="project-preview-container">
+                        <div class="browser-bar">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="browser-title">horus // cold-chain-tracker</span>
+                        </div>
+                        <div class="preview-content">
+                            <img src="https://media.licdn.com/dms/image/v2/D562DAQFtu-auK0q-bw/profile-treasury-image-shrink_1280_1280/B56Z8yc3hxGoAc-/0/1783257856546?e=1785589200&v=beta&t=1Me_IMlOKQTBo84Hp-oGJ7WuqggF28c9LMKDq9TMEoY" alt="HORUS System Preview" class="project-img" />
+                        </div>
+                    </div>
+        
+                    <!-- Deep Dive Content -->
+                    <div class="project-body">
+                        <div class="project-description">
+                            <h4>// Overview</h4>
+                            <p>
+                                Developed for the Vitalitics Hackathon 2026, HORUS is a cold-chain compliance tracker that monitors real-time degradation metrics for volatile bio-assets across different clinical storage tiers.
+                            </p>
+                        </div>
+        
+                        <div class="project-meta">
+                            <div class="meta-block">
+                                <h4>// Tech Stack</h4>
+                                <ul class="tech-tags">
+                                    <li>HTML5</li>
+                                    <li>Tailwind CSS</li>
+                                    <li>JavaScript (ES6+)</li>
+                                    <li>Web Storage API</li>
+                                    <li>File & Blob APIs</li>
+                                    <li>GitHub Pages</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <!-- ================= PROFILES SUB-PAGE VIEW ================= -->
+        <section id="view-profiles" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
+            
+            <div class="page-header center-header">
+                <h2 class="page-title">Digital Identity Matrix</h2>
+                <p class="page-desc">// Platform activity distribution &amp; verified registries</p>
+            </div>
+        
+            <div class="pie-container">
+                <!-- SVG Pie Chart -->
+                <svg viewBox="0 0 200 200" class="pie-chart">
+                    <!-- GitHub (30%) -->
+                    <g class="pie-group" data-name="GitHub" data-link="https://github.com/juergenlaturisa">
+                        <path class="pie-slice" fill="#00ff66" stroke="#0d1117" stroke-width="1.5" d="M100,100 L100,10 A90,90 0 0,1 185.6,72.2 Z" />
+                        <path class="slice-icon" fill="#0d1117" d="M130 45a8 8 0 0 0-2.5 15.6c.4.1.5-.2.5-.4v-1.5c-2.2.5-2.7-1.1-2.7-1.1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.2 0-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8a7.7 7.7 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.1-1.9 3.8-3.7 4 .3.3.6.8.6 1.6v2.4c0 .2.1.5.6.4A8 8 0 0 0 130 45z"/>
+                    </g>
+        
+                    <!-- LinkedIn (25%) -->
+                    <g class="pie-group" data-name="LinkedIn" data-link="https://www.linkedin.com/in/juergen-law">
+                        <path class="pie-slice" fill="#00f0ff" stroke="#0d1117" stroke-width="1.5" d="M100,100 L185.6,72.2 A90,90 0 0,1 127.8,185.6 Z" />
+                        <path class="slice-icon" fill="#0d1117" d="M148 118h-2.5v-4c0-1-.2-2.2-1.3-2.2-1.3 0-1.5 1-1.5 2.1v4.1H140v-8h2.4v1.1h.1c.3-.6 1.2-1.3 2.4-1.3 2.6 0 3.1 1.7 3.1 3.9v4.3zm-11.8-9.2a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm-1.3 9.2h2.5v-8h-2.5v8z"/>
+                    </g>
+        
+                    <!-- ResearchGate (15%) -->
+                    <g class="pie-group" data-name="ResearchGate" data-link="https://www.researchgate.net/profile/Juergen-Laturisa?ev=hdr_xprf">
+                        <path class="pie-slice" fill="#00a884" stroke="#0d1117" stroke-width="1.5" d="M100,100 L127.8,185.6 A90,90 0 0,1 47.1,172.8 Z" />
+                        <text x="82" y="152" class="slice-text-icon" fill="#0d1117">RG</text>
+                    </g>
+        
+                    <!-- ORCID (10%) -->
+                    <g class="pie-group" data-name="ORCID" data-link="https://orcid.org/0009-0000-8070-2480">
+                        <path class="pie-slice" fill="#007a5e" stroke="#0d1117" stroke-width="1.5" d="M100,100 L47.1,172.8 A90,90 0 0,1 14.4,127.8 Z" />
+                        <text x="32" y="138" class="slice-text-icon" fill="#ffffff">iD</text>
+                    </g>
+        
+                    <!-- YouTube (10%) -->
+                    <g class="pie-group" data-name="YouTube" data-link="https://www.youtube.com/@JuergenLaw">
+                        <path class="pie-slice" fill="#1b4d3e" stroke="#0d1117" stroke-width="1.5" d="M100,100 L14.4,127.8 A90,90 0 0,1 14.4,72.2 Z" />
+                        <path class="slice-icon" fill="#ffffff" d="M30 96a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3h-6zm2.5 2.5l3 1.5-3 1.5v-3z"/>
+                    </g>
+        
+                    <!-- DevPost (5%) -->
+                    <g class="pie-group" data-name="DevPost" data-link="https://devpost.com/juergenllaturisa">
+                        <path class="pie-slice" fill="#162c3d" stroke="#0d1117" stroke-width="1.5" d="M100,100 L14.4,72.2 A90,90 0 0,1 47.1,27.2 Z" />
+                        <text x="32" y="52" class="slice-text-icon" fill="#00f0ff">DP</text>
+                    </g>
+        
+                    <!-- OSF (5%) -->
+                    <g class="pie-group" data-name="OSF" data-link="https://osf.io/c57he/">
+                        <path class="pie-slice" fill="#0d2219" stroke="#0d1117" stroke-width="1.5" d="M100,100 L47.1,27.2 A90,90 0 0,1 100,10 Z" />
+                        <text x="68" y="32" class="slice-text-icon" fill="#00ff66">OSF</text>
+                    </g>
+                </svg>
+        
+                <!-- Dynamic Label Under Chart -->
+                <div id="slice-label" class="slice-label-box">// HOVER OR CLICK A SLICE</div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const brackets = document.getElementById('brackets');
+            const dot = document.getElementById('dot');
+            const previewEl = document.getElementById('hover-preview');
+            const previewImg = document.getElementById('preview-img');
+            const pieGroups = document.querySelectorAll('.pie-group');
+            const sliceLabel = document.getElementById('slice-label');
+            const filterBtns = document.querySelectorAll('.pub-filter-btn');
+            const pubCards = document.querySelectorAll('.pub-card');
+
+            // ------------------------------------------------------------
+            // Custom cursor + mouse-following background
+            // ------------------------------------------------------------
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let dotX = mouseX;
+            let dotY = mouseY;
+            let bracketsX = mouseX;
+            let bracketsY = mouseY;
+            let previewX = mouseX;
+            let previewY = mouseY;
+
+            body.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+                body.style.setProperty('--mouse-x', `${mouseX}px`);
+                body.style.setProperty('--mouse-y', `${mouseY}px`);
+            });
+
+            function lerp(start, end, amount) {
+                return (1 - amount) * start + amount * end;
+            }
+
+            function renderCursor() {
+                dotX = lerp(dotX, mouseX, 0.22);
+                dotY = lerp(dotY, mouseY, 0.22);
+                bracketsX = lerp(bracketsX, mouseX, 0.09);
+                bracketsY = lerp(bracketsY, mouseY, 0.09);
+                previewX = lerp(previewX, mouseX, 0.12);
+                previewY = lerp(previewY, mouseY, 0.12);
+
+                dot.style.left = `${dotX}px`;
+                dot.style.top = `${dotY}px`;
+                brackets.style.left = `${bracketsX}px`;
+                brackets.style.top = `${bracketsY}px`;
+                previewEl.style.left = `${previewX}px`;
+                previewEl.style.top = `${previewY}px`;
+
+                requestAnimationFrame(renderCursor);
+            }
+
+            renderCursor();
+
+            // ------------------------------------------------------------
+            // Hash-based page router
+            // ------------------------------------------------------------
+            function router() {
+                const hash = window.location.hash.substring(1) || 'home';
+                const views = document.querySelectorAll('.view');
+                let targetView = document.getElementById(`view-${hash}`);
+
+                if (!targetView) {
+                    targetView = document.getElementById('view-home');
+                }
+
+                views.forEach((view) => view.classList.remove('active-view'));
+                targetView.classList.add('active-view');
+                window.scrollTo(0, 0);
+            }
+
+            window.addEventListener('hashchange', router);
+            router();
+
+            // ------------------------------------------------------------
+            // Link hover effects + publication preview
+            // ------------------------------------------------------------
+            document.addEventListener('mouseover', (event) => {
+                const interactive = event.target.closest(
+                    'a, button, label, .account-button, .sub-link-card, .nav-card'
+                );
+
+                if (interactive) {
+                    brackets.classList.add('hovered');
+                }
+
+                const previewTarget = event.target.closest('[data-preview]');
+                if (previewTarget) {
+                    const imageSource = previewTarget.getAttribute('data-preview');
+                    if (imageSource) {
+                        previewImg.src = imageSource;
+                        previewEl.classList.add('active');
+                    }
+                }
+            });
+
+            document.addEventListener('mouseout', (event) => {
+                const interactive = event.target.closest(
+                    'a, button, label, .account-button, .sub-link-card, .nav-card'
+                );
+
+                if (interactive) {
+                    brackets.classList.remove('hovered');
+                }
+
+                if (event.target.closest('[data-preview]')) {
+                    previewEl.classList.remove('active');
+                }
+            });
+
+            // ------------------------------------------------------------
+            // Profiles: interactive identity matrix
+            // ------------------------------------------------------------
+            pieGroups.forEach((group) => {
+                group.addEventListener('mouseenter', () => {
+                    const name = group.getAttribute('data-name');
+                    sliceLabel.textContent = `[ OPEN ${name.toUpperCase()} ↗ ]`;
+                    sliceLabel.style.borderColor = '#00ff66';
+                });
+
+                group.addEventListener('mouseleave', () => {
+                    sliceLabel.textContent = '// HOVER OR CLICK A SLICE';
+                    sliceLabel.style.borderColor = 'rgba(0, 255, 102, 0.3)';
+                });
+
+                group.addEventListener('click', () => {
+                    const link = group.getAttribute('data-link');
+                    if (link) {
+                        window.open(link, '_blank', 'noopener,noreferrer');
+                    }
+                });
+            });
+
+            // ------------------------------------------------------------
+            // Publications: category filter
+            // ------------------------------------------------------------
+            filterBtns.forEach((button) => {
+                button.addEventListener('click', () => {
+                    filterBtns.forEach((btn) => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const filterValue = button.getAttribute('data-filter');
+
+                    pubCards.forEach((card) => {
+                        const matches =
+                            filterValue === 'all' ||
+                            card.getAttribute('data-category') === filterValue;
+
+                        card.style.display = matches ? 'flex' : 'none';
+                    });
+                });
+            });
+        });
+
+        // Kept global so it can be called directly from future HTML controls.
+        function copyEmail() {
+            const email = 'juergenllaturisa@gmail.com';
+
+            navigator.clipboard.writeText(email).then(() => {
+                const buttonText = document.getElementById('email-text');
+                if (!buttonText) return;
+
+                const originalText = buttonText.innerText;
+                buttonText.innerText = 'Copied!';
+                buttonText.style.color = 'var(--accent-blue)';
+
+                setTimeout(() => {
+                    buttonText.innerText = originalText;
+                    buttonText.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                window.location.href = `mailto:${email}`;
+            });
+        }
+    </script>
+</body>
+</html>
