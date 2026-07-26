@@ -7,6 +7,12 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧬</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!--
+        Maintenance note:
+        Keep page-specific styles grouped below and keep DOM-dependent JavaScript
+        inside DOMContentLoaded. Avoid emergency !important overrides unless
+        they are truly necessary.
+    -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
@@ -27,7 +33,7 @@
         }
 
         @media (hover: hover) and (pointer: fine) {
-            body, a, button, label, input, .account-button, .sub-link-card, .accordion-trigger {
+            body, a, button, label, input, .account-button, .sub-link-card, .nav-card {
                 cursor: none !important;
             }
 
@@ -76,13 +82,15 @@
                 pointer-events: none;
                 z-index: 9998;
                 opacity: 0;
+                visibility: hidden;
                 transform: translate(-50%, -125%) scale(0.85);
-                transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+                transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.25s ease;
                 background: var(--card-bg);
             }
 
             .hover-preview.active {
                 opacity: 1;
+                visibility: visible;
                 transform: translate(-50%, -125%) scale(1);
             }
 
@@ -109,12 +117,10 @@
             align-items: center;
             min-height: 100vh;
             padding: 2rem 1rem;
-            
             background-image: 
                 radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.12), transparent 40%),
                 linear-gradient(135deg, rgba(56, 189, 248, 0.08) 25%, transparent 25%, transparent 50%, rgba(56, 189, 248, 0.08) 50%, rgba(56, 189, 248, 0.08) 75%, transparent 75%, transparent),
                 linear-gradient(180deg, #0b0f17 0%, #111a2e 50%, #0b0f17 100%);
-            
             background-size: 100% 100%, 160px 160px, 100% 100%;
             background-attachment: fixed;
             animation: backgroundCycle 25s linear infinite;
@@ -134,6 +140,20 @@
             padding: 2.5rem 2rem;
             backdrop-filter: blur(8px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: max-width 0.3s ease;
+        }
+
+        .view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .view.active-view {
+            display: block;
+            opacity: 1;
         }
 
         .profile { text-align: center; margin-bottom: 1.5rem; }
@@ -202,7 +222,7 @@
             font-size: 0.9rem;
             color: var(--text-secondary);
             line-height: 1.6;
-            text-align: justify;        
+            text-align: justify;         
             hyphens: auto;             
             word-break: break-word;
         }
@@ -244,13 +264,7 @@
             margin-top: 0.2rem;
         }
 
-        .accordion-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .accordion-trigger {
+        .nav-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -258,56 +272,50 @@
             background: rgba(30, 41, 59, 0.4);
             border: 1px solid var(--border-color);
             border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
             user-select: none;
             transition: all 0.2s ease;
         }
 
-        .accordion-trigger:hover {
+        .nav-card:hover {
             background: rgba(56, 189, 248, 0.06);
             border-color: var(--accent-blue);
         }
 
-        .highlight-trigger { border-color: rgba(52, 211, 153, 0.3); }
-        .highlight-trigger:hover {
+        .highlight-card { border-color: rgba(52, 211, 153, 0.3); }
+        .highlight-card:hover {
             border-color: var(--accent-green);
             background: rgba(52, 211, 153, 0.06);
         }
 
-        .accordion-checkbox { display: none; }
-
-        .accordion-chevron {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+        .back-nav {
+            display: inline-flex;
+            align-items: center;
             gap: 0.5rem;
-            padding-left: 0;
-            border-left: 0px solid var(--border-color);
-            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        padding-left 0.3s ease, 
-                        border-left 0.1s ease;
-        }
-
-        .accordion-checkbox:checked ~ .accordion-content {
-            max-height: 500px;
-            padding-left: 1rem;
-            border-left: 2px solid var(--border-color);
-        }
-
-        .accordion-checkbox:checked ~ .accordion-trigger .accordion-chevron {
-            transform: rotate(90deg);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
             color: var(--accent-blue);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
         }
-        
-        .accordion-checkbox:checked ~ .highlight-trigger .accordion-chevron {
-            color: var(--accent-green);
+        .back-nav:hover {
+            transform: translateX(-4px);
+        }
+
+        .page-header {
+            margin-bottom: 1.25rem;
+        }
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .page-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .sub-link-card {
@@ -321,6 +329,7 @@
             text-decoration: none;
             color: var(--text-primary);
             transition: all 0.2s ease;
+            margin-bottom: 0.5rem;
         }
 
         .sub-link-card:hover {
@@ -357,12 +366,12 @@
             margin-left: 0.5rem;
         }
 
-        .accordion-trigger:hover .link-arrow, .sub-link-card:hover .link-arrow {
+        .nav-card:hover .link-arrow, .sub-link-card:hover .link-arrow {
             color: var(--accent-blue);
             transform: translateX(4px);
         }
         
-        .highlight-trigger:hover .link-arrow { color: var(--accent-green); }
+        .highlight-card:hover .link-arrow { color: var(--accent-green); }
 
         .accounts-grid {
             display: grid;
@@ -435,10 +444,631 @@
                 font-size: 0.75rem;
             }
         }
-    </style>
-</head>
-<body>
 
+
+        .container:has(#view-cv.active-view) {
+            max-width: 900px;
+        }
+
+        .cv-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .cv-doc-container {
+            width: 100%;
+            height: 600px; 
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cv-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+        }
+
+        .cv-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .highlight-box {
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .highlight-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .highlight-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .highlight-list {
+            list-style: none;
+            padding: 0;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .highlight-list li::before {
+            content: "• ";
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .doc-external-link {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            text-decoration: none;
+            margin-top: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .doc-external-link:hover {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+
+        .cv-alternative-section {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .alt-links-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .alt-link-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--accent-green);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            background: rgba(52, 211, 153, 0.05);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .alt-link-card:hover {
+            border-color: var(--accent-green);
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .alt-link-title {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .alt-link-icon {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .cv-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .cv-doc-container {
+                height: 380px;
+            }
+
+            .alt-links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pub-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            overflow-x: auto;
+            padding-bottom: 0.25rem;
+        }
+        
+        .pub-filter-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        
+        .pub-filter-btn.active, .pub-filter-btn:hover {
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.08);
+        }
+        
+        .publications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .pub-card {
+            background: rgba(19, 26, 38, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        
+        .featured-pub {
+            border-color: rgba(56, 189, 248, 0.25);
+        }
+        
+        .placeholder-pub {
+            opacity: 0.7;
+            border-style: dashed;
+        }
+        
+        .pub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pub-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .preprint-badge {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        
+        .review-badge {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+        
+        .pub-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .pub-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+        
+        .pub-authors {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+        
+        .pub-authors strong {
+            color: var(--accent-blue);
+        }
+        
+        .pub-abstract {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .pub-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.4rem;
+            padding-top: 0.6rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .pub-doi-link {
+            color: var(--accent-green);
+            text-decoration: none;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            background: rgba(52, 211, 153, 0.06);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .pub-doi-link:hover {
+            background: rgba(52, 211, 153, 0.15);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+        
+        .pub-venue {
+            color: var(--text-secondary);
+        }
+
+      /* ================= SHOWCASE PROJECTS ================= */
+      .projects-list {
+          display: flex;
+          flex-direction: column;
+          gap: 4rem;
+          margin-top: 2rem;
+      }
+      
+      .project-showcase {
+          background: rgba(13, 17, 23, 0.7);
+          border: 1px solid rgba(0, 255, 102, 0.2);
+          border-radius: 8px;
+          padding: 2rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          transition: border-color 0.3s ease;
+      }
+      
+      .project-showcase:hover {
+          border-color: rgba(0, 255, 102, 0.4);
+      }
+      
+      .project-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          flex-wrap: wrap;
+          gap: 1rem;
+      }
+      
+      .project-type-badge {
+          font-size: 0.75rem;
+          font-family: 'JetBrains Mono', monospace;
+          text-transform: uppercase;
+          color: #00ff66;
+          letter-spacing: 1px;
+      }
+      
+      .project-type-badge.health-badge {
+          color: #00f0ff;
+      }
+      
+      .project-name {
+          font-size: 1.8rem;
+          margin: 0.2rem 0;
+          color: #ffffff;
+      }
+      
+      .project-tagline {
+          font-size: 0.95rem;
+          color: #8b949e;
+          margin: 0;
+      }
+      
+      .project-links {
+          display: flex;
+          gap: 0.75rem;
+      }
+      
+      .project-btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.85rem;
+          font-family: 'JetBrains Mono', monospace;
+          text-decoration: none;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+      }
+      
+      .primary-btn {
+          background: #00ff66;
+          color: #0d1117;
+          font-weight: bold;
+      }
+      
+      .primary-btn:hover {
+          background: #33ff85;
+          box-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+      }
+      
+      .secondary-btn {
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #c9d1d9;
+      }
+      
+      .secondary-btn:hover {
+          border-color: #00ff66;
+          color: #00ff66;
+      }
+      
+      .project-preview-container {
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 6px;
+          overflow: hidden;
+          background: #090d13;
+      }
+      
+      .browser-bar {
+          background: #161b22;
+          padding: 0.5rem 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+      }
+      
+      .dot.red { background: #ff5f56; }
+      .dot.yellow { background: #ffbd2e; }
+      .dot.green { background: #27c93f; }
+      
+      .browser-title {
+          margin-left: auto;
+          font-size: 0.75rem;
+          font-family: 'JetBrains Mono', monospace;
+          color: #6e7681;
+      }
+      
+      .project-img {
+          width: 100%;
+          height: auto;
+          display: block;
+          object-fit: cover;
+      }
+      
+      .project-body {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 2rem;
+          margin-top: 1rem;
+      }
+      
+      @media (max-width: 768px) {
+          .project-body {
+              grid-template-columns: 1fr;
+          }
+      }
+      
+      .project-description h4, .meta-block h4 {
+          font-size: 0.85rem;
+          color: #8b949e;
+          font-family: 'JetBrains Mono', monospace;
+          margin-bottom: 0.75rem;
+      }
+      
+      .project-description p {
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: #c9d1d9;
+          margin-bottom: 1rem;
+      }
+      
+      .tech-tags {
+          list-style: none;
+          padding: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+      }
+      
+      .tech-tags li {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          font-size: 0.75rem;
+          font-family: 'JetBrains Mono', monospace;
+          padding: 0.25rem 0.6rem;
+          border-radius: 4px;
+          color: #58a6ff;
+      }
+      
+      .feature-list {
+          padding-left: 1.2rem;
+          color: #c9d1d9;
+          font-size: 0.9rem;
+      }
+      
+      .feature-list li {
+          margin-bottom: 0.4rem;
+      }
+      
+      .profiles-banner-card {
+          margin-top: 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 1rem 1.5rem;
+          background: rgba(52, 211, 153, 0.04);
+          border: 1px solid rgba(52, 211, 153, 0.3);
+          border-radius: 8px;
+          text-decoration: none;
+          font-size: 1.05rem;
+          font-weight: 600;
+          color: var(--accent-green);
+          font-family: 'JetBrains Mono', monospace;
+          transition: all 0.25s ease;
+          box-shadow: 0 0 15px rgba(52, 211, 153, 0.05);
+      }
+      
+      .profiles-banner-card:hover {
+          background: rgba(52, 211, 153, 0.1);
+          border-color: var(--accent-green);
+          transform: translateY(-2px);
+          box-shadow: 0 0 20px rgba(52, 211, 153, 0.2);
+      }
+      
+
+      
+      #view-profiles .back-nav {
+          align-self: flex-start;
+      }
+      
+      .center-header {
+          text-align: center;
+          width: 100%;
+          margin-bottom: 1.5rem;
+      }
+      
+      .pie-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          max-width: 500px;
+          margin: 0 auto;
+          gap: 1.5rem;
+      }
+      
+      .pie-chart {
+          width: 400px;
+          height: 400px;
+          overflow: visible;
+      }
+      
+      .pie-group {
+          cursor: pointer;
+          transition: filter 0.2s ease, opacity 0.2s ease;
+      }
+      
+      .pie-group:hover {
+          filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.35));
+      }
+      
+      .pie-group:hover .pie-slice {
+          filter: brightness(1.15);
+      }
+      
+      .slice-icon {
+          pointer-events: none;
+      }
+      
+      .slice-label-box {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.8rem;
+          color: var(--accent-cyan, #00f0ff);
+          background: rgba(13, 17, 23, 0.7);
+          border: 1px solid rgba(0, 240, 255, 0.25);
+          padding: 0.6rem 1.25rem;
+          border-radius: 5px;
+          text-align: center;
+          min-width: 230px;
+          box-shadow: none;
+      }
+      
+      .hover-preview {
+          position: fixed !important;
+          top: -9999px !important;
+          left: -9999px !important;
+          pointer-events: none !important;
+      }
+      
+      #view-profiles {
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+      }
+      
+      #view-profiles.active-view {
+          display: flex;
+      }
+
+
+      .contact-block{
+          width:100%;
+          max-width:440px;
+          margin-top:1.75rem;
+      }
+      
+      .contact-title{
+          font-family:'JetBrains Mono', monospace;
+          font-size:0.8rem;
+          color:var(--text-secondary);
+          text-transform:uppercase;
+          letter-spacing:1px;
+          margin-bottom:0.75rem;
+      }
+      
+      .contact-button{
+          width:100%;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+      
+          padding:0.9rem 1rem;
+          margin-bottom:0.75rem;
+      
+          background:rgba(13,17,23,.6);
+          border:1px solid var(--border-color);
+          border-radius:8px;
+      
+          color:var(--text-primary);
+          cursor:pointer;
+      
+          transition:.2s ease;
+      }
+      
+      .contact-button:hover{
+          border-color:var(--accent-green);
+          transform:translateY(-2px);
+      }
+      
+      .contact-button span:first-child{
+          color:var(--text-secondary);
+          font-size:.85rem;
+      }
+      
+      .contact-button span:last-child{
+          font-family:'JetBrains Mono', monospace;
+          font-size:.8rem;
+      }
+</style>
+</head>
+  
+<body>
     <div class="cursor-brackets" id="brackets">
         <span>{</span>
         <span>}</span>
@@ -450,264 +1080,736 @@
     </div>
 
     <div class="container">
-        <header class="profile">
-            <div class="avatar-container">
-                <img class="avatar" src="https://media.licdn.com/dms/image/v2/D5603AQHg5uhNE51ikg/profile-displayphoto-scale_400_400/B56Z6ZAF7TH0Ag-/0/1780683402540?e=1785974400&v=beta&t=SRF20rJZSCSEN0vIdJeR7lVWNapXg7Ndjjls54jzLPg" alt="Juergen Law Laturisa">
-            </div>
-            <h1 class="name">Juergen Law Laturisa</h1>
-            <div class="tagline">HBSc Forensic Science Student @ UofT Mississauga</div>
-            
-            <div class="bio-container">
-                <div class="bio-heading">About</div>
-                <p class="bio">
-                    I'm an incoming HBSc student at the University of Toronto Mississauga pursuing Forensic Science with an intended specialization in Forensic Biology. Outside of academics, I enjoy playing Bloons TD 6 and collecting university-branded pens. Through independent research and software projects, I enjoy exploring how science and technology can contribute to forensic investigations.
-                </p>
-            </div>
-        </header>
+        <!-- ================= HOME VIEW ================= -->
+        <section id="view-home" class="view active-view">
+            <header class="profile">
+                <div class="avatar-container">
+                    <img class="avatar" src="https://media.licdn.com/dms/image/v2/D5603AQHg5uhNE51ikg/profile-displayphoto-scale_400_400/B56Z6ZAF7TH0Ag-/0/1780683402540?e=1785974400&amp;v=beta&amp;t=SRF20rJZSCSEN0vIdJeR7lVWNapXg7Ndjjls54jzLPg" alt="Juergen Law Laturisa">
+                </div>
+                <h1 class="name">Juergen Law Laturisa</h1>
+                <div class="tagline">HBSc Forensic Science Student @ UofT Mississauga</div>
+                
+                <div class="bio-container">
+                    <div class="bio-heading">About</div>
+                    <p class="bio">
+                        I'm an incoming HBSc student at the University of Toronto Mississauga pursuing Forensic Science with an intended specialization in Forensic Biology. Outside of academics, I enjoy playing Bloons TD 6 and collecting university-branded pens. Through independent research and software projects, I enjoy exploring how science and technology can contribute to forensic investigations.
+                    </p>
+                </div>
+            </header>
 
-        <main class="links-container">
-            <div class="section-label">Academic & Experience</div>
-            
-            <div class="accordion-wrapper">
-                <input type="checkbox" id="cv-toggle" class="accordion-checkbox">
-                <label for="cv-toggle" class="accordion-trigger">
+            <main class="links-container">
+                <div class="section-label">Academic &amp; Experience</div>
+                
+                <a href="#cv" class="nav-card">
                     <div class="link-info">
                         <span class="link-title">Curriculum Vitae</span>
-                        <span class="link-desc">Select a targeted version of my background</span>
+                        <span class="link-desc">Highlights of my best achievements in Life Science</span>
                     </div>
-                    <span class="accordion-chevron" aria-hidden="true">&gt;</span>
-                </label>
-                
-                <div class="accordion-content">
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.y8e6e79xatfx" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ Master CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.oryv9z5zycmz" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ Life Science CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.25m2j14tjge1" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ Programming CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.end3sxcleqlj" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ Finance CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.3e26gwwuv8tz" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ Hospitality CV</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                </div>
-            </div>
+                    <span class="link-arrow">-&gt;</span>
+                </a>
 
-            <div class="accordion-wrapper">
-                <input type="checkbox" id="pub-toggle" class="accordion-checkbox">
-                <label for="pub-toggle" class="accordion-trigger">
+                <a href="#publications" class="nav-card">
                     <div class="link-info">
                         <span class="link-title">Publications</span>
-                        <span class="link-desc">Preprint research papers and articles</span>
+                        <span class="link-desc">Preprints, Articles, and similar publications</span>
                     </div>
-                    <span class="accordion-chevron" aria-hidden="true">&gt;</span>
-                </label>
+                    <span class="link-arrow">-&gt;</span>
+                </a>
                 
-                <div class="accordion-content">
-                    <a href="https://doi.org/10.13140/RG.2.2.24691.28969" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ The Evolution of Forensic Plant DNA Profiling • Preprint</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="section-label">Featured Projects</div>
-
-            <div class="accordion-wrapper">
-                <input type="checkbox" id="argus-toggle" class="accordion-checkbox">
-                <label for="argus-toggle" class="accordion-trigger highlight-trigger" data-preview="https://media.licdn.com/dms/image/v2/D5622AQGl9kun2Y40mw/feedshare-image-high-res/B56Z7hVsJTGsAc-/0/1781897020224?e=1786579200&v=beta&t=BBRgYSpA6mXOMCVwjocvC_NB2pRfXNq-feCBSNp3WMw">
+                <a href="#projects" class="nav-card">
                     <div class="link-info">
-                        <span class="link-title" style="color: var(--accent-green);">ARGUS</span>
-                        <span class="link-desc">Accounting Report & GUidance System</span>
-                    </div>
-                    <span class="accordion-chevron" aria-hidden="true">&gt;</span>
-                </label>
-                
-                <div class="accordion-content">
-                    <a href="https://github.com/JuergenLaw/financial-report-system" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ GitHub Repository</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://drive.google.com/drive/folders/1rrypquIKyJnfLiTLfyiRsz2lSqqh1W04?usp=sharing" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ System Templates</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://www.youtube.com/playlist?list=PLQUXJZ2hz1xhuX7t6MzdJn9GAsZx3u6Kl" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ System Guide</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                </div>
-            </div>
+                        <span class="link-title">Featured Projects</span>
+                        <span class="link-desc">Selected projects in science and technology</span>
+                    </div> 
+                    <span class="link-arrow">-&gt;</span>
+                </a>
 
-            <div class="accordion-wrapper">
-                <input type="checkbox" id="horus-toggle" class="accordion-checkbox">
-                <label for="horus-toggle" class="accordion-trigger highlight-trigger" data-preview="https://media.licdn.com/dms/image/v2/D562DAQFtu-auK0q-bw/profile-treasury-image-shrink_1280_1280/B56Z8yc3hxGoAc-/0/1783257856546?e=1785589200&v=beta&t=1Me_IMlOKQTBo84Hp-oGJ7WuqggF28c9LMKDq9TMEoY">
-                    <div class="link-info">
-                        <span class="link-title" style="color: var(--accent-green);">HORUS</span>
-                        <span class="link-desc">Healthcare & Operational Reagent Upkeep System</span>
-                    </div>
-                    <span class="accordion-chevron" aria-hidden="true">&gt;</span>
-                </label>
-                
-                <div class="accordion-content">
-                    <a href="https://github.com/JuergenLaturisa/HORUS" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ GitHub Repository</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://juergenlaturisa.github.io/HORUS/" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ System Site</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                    <a href="https://www.youtube.com/watch?v=rJtlw1ltLvc" class="sub-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="sub-link-title">↳ System Demo</span>
-                        <span class="link-arrow">-&gt;</span>
-                    </a>
-                </div>
-            </div>
+                <!-- FULL-WIDTH ACCENT BANNER FOR PROFILES -->
+                <a href="#profiles" class="profiles-banner-card">
+                    <span>Profiles</span>
+                </a>
+            </main>
+        </section>
 
-            <div class="section-label">Profiles</div>
+        <!-- ================= CV SUB-PAGE VIEW ================= -->
+        <section id="view-cv" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
             
-            <div class="grid-sub-label" style="color: var(--accent-blue);">// Professional & Social</div>
-            <div class="accounts-grid">
-                <a href="https://www.linkedin.com/in/juergen-law" class="account-button" target="_blank" rel="noopener noreferrer">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/>
-                    </svg>LinkedIn
-                </a>
-                <a href="https://www.youtube.com/@JuergenLaw" class="account-button" target="_blank" rel="noopener noreferrer">
-                    <img src="https://cdn.simpleicons.org/youtube" alt="YouTube logo">YouTube
-                </a>
-                <button type="button" class="account-button" id="email-btn" onclick="copyEmail()">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                    </svg><span id="email-text">Email</span>
+            <div class="page-header">
+                <h2 class="page-title">Curriculum Vitae</h2>
+                <p class="page-desc">// A highlight of my best achievements in Life Science</p>
+            </div>
+
+            <!-- Two-Column Layout: Left = Embedded Doc, Right = Highlights -->
+            <div class="cv-layout">
+                <!-- Left: Embedded Google Doc Preview -->
+                <div class="cv-doc-container">
+                    <img 
+                        src="https://media.licdn.com/dms/image/v2/D562DAQG83j_yZ91hEg/profile-treasury-document-images_1280/B56Z.ZyzsgHIAg-/1/1784991661562?e=1785974400&v=beta&t=uymtapIrPNKsS-WL7JfXUMMY-EE6IU0ZIJxgMoYMxto" 
+                        alt="Life Science CV" 
+                        class="cv-img"
+                    />
+                </div>
+
+                <!-- Right: Highlights Panel -->
+                <div class="cv-highlights">
+                    <div class="highlight-box">
+                        <div class="highlight-title"> Program of Study (Intended)</div>
+                        <p class="highlight-text">Forensic Science (Biology Specialization) @ University of Toronto Mississauga.</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">Highlights</div>
+                        <ul class="highlight-list">
+                            <li>Awarded the International Scholar Award worth up to CAD 180,000 over four years.</li>
+                            <li>Wrote an independent forensic-botany paper, currently under review at <i>Science & Justice</i>.</li>
+                            <li>Selected as 1 of 3 final-year students for an Advanced Biology Enrichment Group.</li>
+                            <li>Organized hands-on science outreach for 100+ elementary students.</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-title">Full Document</div>
+                        <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.oryv9z5zycmz" target="_blank" rel="noopener noreferrer" class="doc-external-link">
+                            Life Science ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Redirects Section -->
+            <div class="cv-alternative-section">
+                <div class="section-label">Looking for something else?</div>
+                <div class="alt-links-grid">
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.25m2j14tjge1" class="alt-link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="alt-link-title">Programming</span>
+                        <span class="alt-link-icon">↗</span>
+                    </a>
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.end3sxcleqlj" class="alt-link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="alt-link-title">Business & Finance</span>
+                        <span class="alt-link-icon">↗</span>
+                    </a>
+                    <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.3e26gwwuv8tz" class="alt-link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="alt-link-title">Hospitality</span>
+                        <span class="alt-link-icon">↗</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PUBLICATIONS SUB-PAGE VIEW ================= -->
+        <section id="view-publications" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
+            
+            <div class="page-header">
+                <h2 class="page-title">Publications</h2>
+                <p class="page-desc">// Preprints, Articles, and similar publications</p>
+            </div>
+        
+            <!-- 1. Add "data-filter" to these buttons -->
+            <div class="pub-filters">
+                <button class="pub-filter-btn active" data-filter="all">All (1)</button>
+                <button class="pub-filter-btn" data-filter="preprint">Preprints</button>
+            </div>
+        
+            <div class="publications-list">
+                
+                <!-- 2. Add "data-category" to the article -->
+                <article class="pub-card featured-pub" data-category="preprint" data-preview="https://media.licdn.com/dms/image/v2/D562DAQHTfCJ7-2LksA/profile-treasury-image-shrink_480_480/B56Z.AVFR.GsAY-/0/1784564438597?e=1785600000&v=beta&t=S8DgQlxe0MdK_PgE2MjKFGu17YlaRl2eKlqBskAGnJ4">
+                    <div class="pub-header">
+                        <span class="pub-badge preprint-badge">Preprint</span>
+                        <span class="pub-year">2026</span>
+                    </div>
+        
+                    <h3 class="pub-title">Re-evaluating RAPD-Based Plant DNA Evidence from the 1992 Maricopa Homicide Investigation: A Modern Reassessment of the First Court-Accepted Molecular Botanical Evidence</h3>
+                    
+                    <p class="pub-authors">
+                        <strong>Laturisa J.L.</strong>
+                    </p>
+        
+                    <p class="pub-abstract">
+            This study re-examines the Blue Palo Verde (<i>Parkinsonia florida</i>) seed pod evidence by reassessing its statistical weight using modern population genetics principles and evaluating its admissibility under the transition from the <i>Frye</i> to the <i>Daubert</i> standard.
+        </p>
+                  
+        <p class="pub-abstract">
+                Currently under review at <i>Science & Justice</i>.
+            </p>
+        
+        <div class="pub-footer">
+            <a href="https://doi.org/10.13140/RG.2.2.24691.28969" target="_blank" rel="noopener noreferrer" class="pub-doi-link">
+                DOI: 10.13140/RG.2.2.24691.28969 ↗
+            </a>
+            <span class="pub-venue">ResearchGate</span>
+        </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ================= FEATURED PROJECTS SUB-PAGE VIEW ================= -->
+        <section id="view-projects" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
+            
+            <div class="page-header">
+                <h2 class="page-title">Featured Projects</h2>
+                <p class="page-desc">// Selected projects in science and technology</p>
+            </div>
+        
+            <div class="projects-list">
+        
+                <!-- ================= PROJECT 1: ARGUS ================= -->
+                <article class="project-showcase">
+                    <!-- Header Section -->
+                    <div class="project-header">
+                        <div class="project-title-group">
+                            <span class="project-type-badge">Financial Engineering & Automation</span>
+                            <h3 class="project-name">ARGUS</h3>
+                            <p class="project-tagline">Accounting Report & GUidance System</p>
+                        </div>
+                        
+                        <div class="project-links">
+                            <a href="https://drive.google.com/drive/folders/1rrypquIKyJnfLiTLfyiRsz2lSqqh1W04?usp=sharing" target="_blank" rel="noopener noreferrer" class="project-btn primary-btn">System Templates ↗</a>
+                            <a href="https://www.youtube.com/playlist?list=PLQUXJZ2hz1xhuX7t6MzdJn9GAsZx3u6Kl" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">System Guide ↗</a>
+                            <a href="https://github.com/JuergenLaw/financial-report-system" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">GitHub Repo ↗</a>
+                        </div>
+                    </div>
+        
+                    <!-- Visual Preview Frame -->
+                    <div class="project-preview-container">
+                        <div class="browser-bar">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="browser-title">argus // financial-dashboard</span>
+                        </div>
+                        <div class="preview-content">
+                            <img src="https://media.licdn.com/dms/image/v2/D5622AQGl9kun2Y40mw/feedshare-image-high-res/B56Z7hVsJTGsAc-/0/1781897020224?e=1786579200&v=beta&t=BBRgYSpA6mXOMCVwjocvC_NB2pRfXNq-feCBSNp3WMw" alt="ARGUS System Preview" class="project-img" />
+                        </div>
+                    </div>
+        
+                    <!-- Deep Dive Content -->
+                    <div class="project-body">
+                        <div class="project-description">
+                            <h4>// Overview</h4>
+                            <p>
+                                A personal accounting system designed to monitor, analyze, and report financial activity through automated journals, ledgers, financial statements, and long-term financial planning tools.
+                            </p>
+                        </div>
+        
+                        <div class="project-meta">
+                            <div class="meta-block">
+                                <h4>// Tech Stack</h4>
+                                <ul class="tech-tags">
+                                    <li>Google Apps Script</li>
+                                    <li>HTML5</li>
+                                    <li>CSS3</li>
+                                    <li>JavaScript (ES6)</li>
+                                    <li>Google Sheets</li>
+                                    <li>SpreadsheetApp</li>
+                                    <li>HtmlService</li>
+                                    <li>Git</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+        
+                <!-- ================= PROJECT 2: HORUS ================= -->
+                <article class="project-showcase">
+                    <!-- Header Section -->
+                    <div class="project-header">
+                        <div class="project-title-group">
+                            <span class="project-type-badge health-badge">HealthTech & Cold-Chain Compliance</span>
+                            <h3 class="project-name">HORUS</h3>
+                            <p class="project-tagline">Healthcare & Operational Reagent Upkeep System</p>
+                        </div>
+                        
+                        <div class="project-links">
+                            <a href="https://juergenlaturisa.github.io/HORUS/" target="_blank" rel="noopener noreferrer" class="project-btn primary-btn">Live System ↗</a>
+                            <a href="https://www.youtube.com/watch?v=rJtlw1ltLvc" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">Video Demo ↗</a>
+                            <a href="https://github.com/JuergenLaturisa/HORUS" target="_blank" rel="noopener noreferrer" class="project-btn secondary-btn">GitHub Repo ↗</a>
+                        </div>
+                    </div>
+        
+                    <!-- Visual Preview Frame -->
+                    <div class="project-preview-container">
+                        <div class="browser-bar">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="browser-title">horus // cold-chain-tracker</span>
+                        </div>
+                        <div class="preview-content">
+                            <img src="https://media.licdn.com/dms/image/v2/D562DAQFtu-auK0q-bw/profile-treasury-image-shrink_1280_1280/B56Z8yc3hxGoAc-/0/1783257856546?e=1785589200&v=beta&t=1Me_IMlOKQTBo84Hp-oGJ7WuqggF28c9LMKDq9TMEoY" alt="HORUS System Preview" class="project-img" />
+                        </div>
+                    </div>
+        
+                    <!-- Deep Dive Content -->
+                    <div class="project-body">
+                        <div class="project-description">
+                            <h4>// Overview</h4>
+                            <p>
+                                Developed for the Vitalitics Hackathon 2026, HORUS is a cold-chain compliance tracker that monitors real-time degradation metrics for volatile bio-assets across different clinical storage tiers.
+                            </p>
+                        </div>
+        
+                        <div class="project-meta">
+                            <div class="meta-block">
+                                <h4>// Tech Stack</h4>
+                                <ul class="tech-tags">
+                                    <li>HTML5</li>
+                                    <li>Tailwind CSS</li>
+                                    <li>JavaScript (ES6+)</li>
+                                    <li>Web Storage API</li>
+                                    <li>File & Blob APIs</li>
+                                    <li>GitHub Pages</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <!-- ================= PROFILES SUB-PAGE VIEW ================= -->
+        <section id="view-profiles" class="view">
+            <a href="#home" class="back-nav">&lt;- Back to Home</a>
+        
+            <div class="pie-container">
+                <!-- SVG Pie Chart -->
+                <svg viewBox="0 0 200 200" class="pie-chart">
+                
+                    <!-- GitHub — 30% -->
+                    <g class="pie-group"
+                       data-name="GitHub"
+                       data-link="https://github.com/juergenlaturisa">
+                
+                        <circle
+                            class="pie-slice"
+                            cx="100" cy="100" r="72"
+                            fill="none"
+                            stroke="#00e5c3"
+                            stroke-width="28"
+                            stroke-dasharray="135.72 316.67"
+                            stroke-dashoffset="0"
+                            transform="rotate(-90 100 100)"
+                        />
+                
+                        <image
+                            href="https://cdn.simpleicons.org/github/0d1117"
+                            x="149"
+                            y="48"
+                            width="20"
+                            height="20"
+                            preserveAspectRatio="xMidYMid meet"
+                            class="slice-icon"
+                        />
+                    </g>
+                
+                
+                    <!-- LinkedIn — 25% -->
+                    <g class="pie-group"
+                       data-name="LinkedIn"
+                       data-link="https://www.linkedin.com/in/juergen-law">
+                
+                        <circle
+                            class="pie-slice"
+                            cx="100" cy="100" r="72"
+                            fill="none"
+                            stroke="#00cfe8"
+                            stroke-width="28"
+                            stroke-dasharray="113.10 339.29"
+                            stroke-dashoffset="-135.72"
+                            transform="rotate(-90 100 100)"
+                        />
+                
+                        <path
+                            class="slice-icon"
+                            fill="#0d1117"
+                            transform="translate(128 155) scale(0.67)"
+                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C23.2.774 22.4 0 21.421 0z"
+                        />
+                    </g>
+                
+                
+                    <!-- ResearchGate — 15% -->
+                    <g class="pie-group"
+                       data-name="ResearchGate"
+                       data-link="https://www.researchgate.net/profile/Juergen-Laturisa?ev=hdr_xprf">
+                
+                        <circle
+                            class="pie-slice"
+                            cx="100" cy="100" r="72"
+                            fill="none"
+                            stroke="#00a884"
+                            stroke-width="28"
+                            stroke-dasharray="67.86 384.53"
+                            stroke-dashoffset="-248.82"
+                            transform="rotate(-90 100 100)"
+                        />
+                
+                        <image
+                            href="https://cdn.simpleicons.org/researchgate/0d1117"
+                            x="40"
+                            y="141"
+                            width="20"
+                            height="20"
+                            preserveAspectRatio="xMidYMid meet"
+                            class="slice-icon"
+                        />
+                    </g>
+                
+                
+                    <!-- ORCID — 10% -->
+                    <g class="pie-group"
+                       data-name="ORCID"
+                       data-link="https://orcid.org/0009-0000-8070-2480">
+                
+                        <circle
+                            class="pie-slice"
+                            cx="100" cy="100" r="72"
+                            fill="none"
+                            stroke="#008f6f"
+                            stroke-width="28"
+                            stroke-dasharray="45.24 407.15"
+                            stroke-dashoffset="-316.67"
+                            transform="rotate(-90 100 100)"
+                        />
+                
+                        <<image
+                            href="https://cdn.simpleicons.org/orcid/ffffff"
+                            x="18"
+                            y="90"
+                            width="20"
+                            height="20"
+                            preserveAspectRatio="xMidYMid meet"
+                            class="slice-icon"
+                        />
+                    </g>
+                
+                
+                    <!-- YouTube — 10% -->
+                    <g class="pie-group"
+                       data-name="YouTube"
+                       data-link="https://www.youtube.com/@JuergenLaw">
+                
+                        <circle
+                            class="pie-slice"
+                            cx="100" cy="100" r="72"
+                            fill="none"
+                            stroke="#176b5b"
+                            stroke-width="28"
+                            stroke-dasharray="45.24 407.15"
+                            stroke-dashoffset="-361.91"
+                            transform="rotate(-90 100 100)"
+                        />
+                
+                        <image
+                            href="https://cdn.simpleicons.org/youtube/ffffff"
+                            x="33"
+                            y="47"
+                            width="20"
+                            height="20"
+                            preserveAspectRatio="xMidYMid meet"
+                            class="slice-icon"
+                        />
+                    </g>
+                
+                
+                    <!-- DevPost — 5% -->
+                    <g class="pie-group"
+                       data-name="DevPost"
+                       data-link="https://devpost.com/juergenllaturisa">
+                
+                        <circle
+                            class="pie-slice"
+                            cx="100" cy="100" r="72"
+                            fill="none"
+                            stroke="#23445b"
+                            stroke-width="28"
+                            stroke-dasharray="22.62 429.77"
+                            stroke-dashoffset="-407.15"
+                            transform="rotate(-90 100 100)"
+                        />
+                
+                        <image
+                            href="https://cdn.simpleicons.org/devpost/d9fbff"
+                            x="57"
+                            y="26"
+                            width="20"
+                            height="20"
+                            preserveAspectRatio="xMidYMid meet"
+                            class="slice-icon"
+                        />
+                    </g>
+                
+                
+                    <!-- OSF — 5% -->
+                    <g class="pie-group"
+                       data-name="OSF"
+                       data-link="https://osf.io/c57he/">
+                
+                        <circle
+                            class="pie-slice"
+                            cx="100" cy="100" r="72"
+                            fill="none"
+                            stroke="#12372d"
+                            stroke-width="28"
+                            stroke-dasharray="22.62 429.77"
+                            stroke-dashoffset="-429.77"
+                            transform="rotate(-90 100 100)"
+                        />
+                
+                        <image
+                            href="https://cdn.simpleicons.org/osf/b8ffe1"
+                            x="79"
+                            y="19"
+                            width="20"
+                            height="20"
+                            preserveAspectRatio="xMidYMid meet"
+                            class="slice-icon"
+                        />
+                    </g>
+                
+                
+                    <!-- Center -->
+                    <circle
+                        cx="100"
+                        cy="100"
+                        r="50"
+                        fill="rgba(13, 17, 23, 0.96)"
+                    />
+                
+                    <text
+                        x="100"
+                        y="97"
+                        text-anchor="middle"
+                        fill="#00f0ff"
+                        font-family="'JetBrains Mono', monospace"
+                        font-size="8"
+                        font-weight="600"
+                        letter-spacing="1.2">
+                        PROFILES
+                    </text>
+                
+                    <text
+                        x="100"
+                        y="108"
+                        text-anchor="middle"
+                        fill="rgba(255,255,255,0.45)"
+                        font-family="'JetBrains Mono', monospace"
+                        font-size="4.5">
+                        7 PLATFORMS
+                    </text>
+                
+                </svg>
+        
+                <!-- Dynamic Label Under Chart -->
+                <div id="slice-label" class="slice-label-box">PICK A PROFILE</div>
+            </div>
+
+            <div class="contact-block">
+
+                <h3 class="contact-title">Contact</h3>
+            
+                <button class="contact-button"
+                    onclick="copyEmail('juergenllaturisa@gmail.com','email-personal')">
+            
+                    <span>Personal</span>
+                    <span id="email-personal">
+                        juergenllaturisa@gmail.com
+                    </span>
+            
                 </button>
+            
+                <button class="contact-button"
+                    onclick="copyEmail('juergen.laturisa@mail.utoronto.ca','email-utm')">
+            
+                    <span>University</span>
+                    <span id="email-utm">
+                        juergen.laturisa@mail.utoronto.ca
+                    </span>
+            
+                </button>
+            
             </div>
-
-            <div class="grid-sub-label" style="color: var(--accent-blue);">// Scientific Registries</div>
-            <div class="accounts-grid">
-                <a href="https://orcid.org/0009-0000-8070-2480" class="account-button" target="_blank" rel="noopener noreferrer">
-                    <img src="https://cdn.simpleicons.org/orcid" alt="ORCID logo">ORCID
-                </a>
-                <a href="https://www.researchgate.net/profile/Juergen-Laturisa?ev=hdr_xprf" class="account-button" target="_blank" rel="noopener noreferrer">
-                    <img src="https://cdn.simpleicons.org/researchgate" alt="ResearchGate logo">RG
-                </a>
-                <a href="https://osf.io/c57he/" class="account-button" target="_blank" rel="noopener noreferrer">
-                    <img src="https://cdn.simpleicons.org/osf" alt="OSF logo">OSF
-                </a>
-            </div>
-
-            <div class="grid-sub-label" style="color: var(--accent-green);">// System Engineering</div>
-            <div class="accounts-grid eng-grid" style="margin-bottom: 0;">
-                <a href="https://github.com/juergenlaturisa" class="account-button" target="_blank" rel="noopener noreferrer">
-                    <img src="https://cdn.simpleicons.org/github" alt="GitHub logo">GitHub
-                </a>
-                <a href="https://devpost.com/juergenllaturisa?ref_content=user-portfolio&ref_feature=portfolio&ref_medium=global-nav" class="account-button" target="_blank" rel="noopener noreferrer">
-                    <img src="https://cdn.simpleicons.org/devpost" alt="Devpost logo">DevPost
-                </a>
-            </div>
-        </main>
+        </section>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
             const brackets = document.getElementById('brackets');
             const dot = document.getElementById('dot');
             const previewEl = document.getElementById('hover-preview');
             const previewImg = document.getElementById('preview-img');
+            const pieGroups = document.querySelectorAll('.pie-group');
+            const sliceLabel = document.getElementById('slice-label');
+            const filterBtns = document.querySelectorAll('.pub-filter-btn');
+            const pubCards = document.querySelectorAll('.pub-card');
 
+            // ------------------------------------------------------------
+            // Custom cursor + mouse-following background
+            // ------------------------------------------------------------
             let mouseX = window.innerWidth / 2;
             let mouseY = window.innerHeight / 2;
+            let dotX = mouseX;
+            let dotY = mouseY;
+            let bracketsX = mouseX;
+            let bracketsY = mouseY;
+            let previewX = mouseX;
+            let previewY = mouseY;
 
-            let dotX = mouseX, dotY = mouseY;
-            let bracketsX = mouseX, bracketsY = mouseY;
-            let previewX = mouseX, previewY = mouseY;
-
-            body.addEventListener("mousemove", (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-
-                body.style.setProperty("--mouse-x", `${mouseX}px`);
-                body.style.setProperty("--mouse-y", `${mouseY}px`);
+            body.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+                body.style.setProperty('--mouse-x', `${mouseX}px`);
+                body.style.setProperty('--mouse-y', `${mouseY}px`);
             });
 
-            function lerp(start, end, amt) {
-                return (1 - amt) * start + amt * end;
+            function lerp(start, end, amount) {
+                return (1 - amount) * start + amount * end;
             }
 
-            function render() {
+            function renderCursor() {
                 dotX = lerp(dotX, mouseX, 0.22);
                 dotY = lerp(dotY, mouseY, 0.22);
-                dot.style.left = `${dotX}px`;
-                dot.style.top = `${dotY}px`;
-
                 bracketsX = lerp(bracketsX, mouseX, 0.09);
                 bracketsY = lerp(bracketsY, mouseY, 0.09);
-                brackets.style.left = `${bracketsX}px`;
-                brackets.style.top = `${bracketsY}px`;
-
                 previewX = lerp(previewX, mouseX, 0.12);
                 previewY = lerp(previewY, mouseY, 0.12);
+
+                dot.style.left = `${dotX}px`;
+                dot.style.top = `${dotY}px`;
+                brackets.style.left = `${bracketsX}px`;
+                brackets.style.top = `${bracketsY}px`;
                 previewEl.style.left = `${previewX}px`;
                 previewEl.style.top = `${previewY}px`;
 
-                requestAnimationFrame(render);
+                requestAnimationFrame(renderCursor);
             }
 
-            render();
+            renderCursor();
 
-            document.addEventListener('mouseover', (e) => {
-                if (e.target.closest('a, button, label, .account-button, .sub-link-card, .accordion-trigger')) {
+            // ------------------------------------------------------------
+            // Hash-based page router
+            // ------------------------------------------------------------
+            function router() {
+                const hash = window.location.hash.substring(1) || 'home';
+                const views = document.querySelectorAll('.view');
+                let targetView = document.getElementById(`view-${hash}`);
+
+                if (!targetView) {
+                    targetView = document.getElementById('view-home');
+                }
+
+                views.forEach((view) => view.classList.remove('active-view'));
+                targetView.classList.add('active-view');
+                window.scrollTo(0, 0);
+            }
+
+            window.addEventListener('hashchange', router);
+            router();
+
+            // ------------------------------------------------------------
+            // Link hover effects + publication preview
+            // ------------------------------------------------------------
+            document.addEventListener('mouseover', (event) => {
+                const interactive = event.target.closest(
+                    'a, button, label, .account-button, .sub-link-card, .nav-card, .pie-group'
+                );
+
+                if (interactive) {
                     brackets.classList.add('hovered');
                 }
 
-                const previewTarget = e.target.closest('[data-preview]');
+                const previewTarget = event.target.closest('[data-preview]');
                 if (previewTarget) {
-                    const imgSrc = previewTarget.getAttribute('data-preview');
-                    if (imgSrc) {
-                        previewImg.src = imgSrc;
+                    const imageSource = previewTarget.getAttribute('data-preview');
+                    if (imageSource) {
+                        previewImg.src = imageSource;
                         previewEl.classList.add('active');
                     }
                 }
             });
 
-            document.addEventListener('mouseout', (e) => {
-                if (e.target.closest('a, button, label, .account-button, .sub-link-card, .accordion-trigger')) {
+            document.addEventListener('mouseout', (event) => {
+                const interactive = event.target.closest(
+                    'a, button, label, .account-button, .sub-link-card, .nav-card, .pie-group'
+                );
+
+                if (interactive) {
                     brackets.classList.remove('hovered');
                 }
 
-                if (e.target.closest('[data-preview]')) {
+                if (event.target.closest('[data-preview]')) {
                     previewEl.classList.remove('active');
                 }
             });
+
+            // ------------------------------------------------------------
+            // Profiles: interactive identity matrix
+            // ------------------------------------------------------------
+            pieGroups.forEach((group) => {
+                group.addEventListener('mouseenter', () => {
+                    const name = group.getAttribute('data-name');
+                    sliceLabel.textContent = `[ OPEN ${name.toUpperCase()} ↗ ]`;
+                    sliceLabel.style.borderColor = '#00ff66';
+                });
+
+                group.addEventListener('mouseleave', () => {
+                    sliceLabel.textContent = '// HOVER OR CLICK A SLICE';
+                    sliceLabel.style.borderColor = 'rgba(0, 255, 102, 0.3)';
+                });
+
+                group.addEventListener('click', () => {
+                    const link = group.getAttribute('data-link');
+                    if (link) {
+                        window.open(link, '_blank', 'noopener,noreferrer');
+                    }
+                });
+            });
+
+            // ------------------------------------------------------------
+            // Publications: category filter
+            // ------------------------------------------------------------
+            filterBtns.forEach((button) => {
+                button.addEventListener('click', () => {
+                    filterBtns.forEach((btn) => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const filterValue = button.getAttribute('data-filter');
+
+                    pubCards.forEach((card) => {
+                        const matches =
+                            filterValue === 'all' ||
+                            card.getAttribute('data-category') === filterValue;
+
+                        card.style.display = matches ? 'flex' : 'none';
+                    });
+                });
+            });
         });
 
-        function copyEmail() {
-            const email = "juergenllaturisa@gmail.com";
-            navigator.clipboard.writeText(email).then(() => {
-                const btnText = document.getElementById("email-text");
-                const originalText = btnText.innerText;
-                btnText.innerText = "Copied!";
-                btnText.style.color = "var(--accent-blue)";
-                
-                setTimeout(() => {
-                    btnText.innerText = originalText;
-                    btnText.style.color = "";
-                }, 2000);
-            }).catch(() => {
-                window.location.href = "mailto:" + email;
-            });
-        }
+          // Copies any email to clipboard and briefly changes the button text.
+            function copyEmail(email, elementId) {
+                navigator.clipboard.writeText(email).then(() => {
+                    const buttonText = document.getElementById(elementId);
+                    if (!buttonText) return;
+            
+                    const originalText = buttonText.innerText;
+            
+                    buttonText.innerText = "Copied!";
+                    buttonText.style.color = "var(--accent-blue)";
+            
+                    setTimeout(() => {
+                        buttonText.innerText = originalText;
+                        buttonText.style.color = "";
+                    }, 2000);
+            
+                }).catch(() => {
+                    // Fallback for older browsers
+                    alert(email);
+                });
+            }
     </script>
 </body>
 </html>
