@@ -1127,6 +1127,33 @@
       
           will-change:transform;
       }
+
+      .profiles-wheel-container { 
+          width: 100%;
+          max-width: 100%;
+          padding: 0 1rem;
+          margin: 0 auto;
+        }
+        
+        .profiles-wheel-container svg, 
+        .profiles-wheel-container img {
+          max-width: 100%;
+          height: auto;
+          display: block;
+        }
+
+      .button-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          width: 100%;
+        }
+        
+        .button-container button, 
+        .button-container a {
+          flex: 1 1 auto;
+          min-width: fit-content;
+        }
 </style>
 </head>
   
@@ -1585,7 +1612,7 @@
                             transform="rotate(-90 100 100)"
                         />
                 
-                        <<image
+                        <image
                             href="https://cdn.simpleicons.org/orcid/ffffff"
                             x="49"
                             y="150"
