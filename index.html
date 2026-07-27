@@ -148,12 +148,22 @@
         .view {
             display: none;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
         }
-
+        
         .view.active-view {
             display: block;
-            opacity: 1;
+            animation: viewFadeIn 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        
+        @keyframes viewFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .profile { text-align: center; margin-bottom: 1.5rem; }
@@ -445,8 +455,10 @@
             }
         }
 
-
-        .container:has(#view-cv.active-view) {
+        .container:has(#view-cv.active-view),
+        .container:has(#view-projects.active-view),
+        .container:has(#view-publications.active-view),
+        .container:has(#view-profiles.active-view) {
             max-width: 900px;
         }
 
@@ -729,7 +741,6 @@
             color: var(--text-secondary);
         }
 
-      /* ================= SHOWCASE PROJECTS ================= */
       .projects-list {
           display: flex;
           flex-direction: column;
@@ -1039,38 +1050,82 @@
           margin-bottom:0.75rem;
       }
       
-      .contact-button{
-          width:100%;
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-      
-          padding:0.9rem 1rem;
-          margin-bottom:0.75rem;
-      
-          background:rgba(13,17,23,.6);
-          border:1px solid var(--border-color);
-          border-radius:8px;
-      
-          color:var(--text-primary);
-          cursor:pointer;
-      
-          transition:.2s ease;
+      .contact-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.75rem;
       }
       
-      .contact-button:hover{
-          border-color:var(--accent-green);
-          transform:translateY(-2px);
+      .contact-button {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.9rem 1rem;
+          background: rgba(13, 17, 23, 0.6);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          color: var(--text-primary);
+          cursor: pointer;
+          transition: 0.2s ease;
       }
       
-      .contact-button span:first-child{
-          color:var(--text-secondary);
-          font-size:.85rem;
+      .contact-button:hover {
+          border-color: var(--accent-green);
+          transform: translateY(-2px);
       }
       
-      .contact-button span:last-child{
-          font-family:'JetBrains Mono', monospace;
-          font-size:.8rem;
+      .contact-button svg {
+          width: 16px;
+          height: 16px;
+          fill: var(--text-secondary);
+          transition: fill 0.2s ease;
+      }
+      
+      .contact-button:hover svg {
+          fill: var(--accent-green);
+      }
+      
+      .contact-button span {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          transition: color 0.2s ease;
+      }
+      
+      .contact-button:hover span {
+          color: var(--text-primary);
+      }
+      /* ============================================================
+         Ambient Background Relics
+      ============================================================ */
+      
+      .floating-relic{
+          position:fixed;
+      
+          left:0;
+          top:0;
+      
+          font-family:
+              "Segoe UI Symbol",
+              "Noto Sans Symbols",
+              sans-serif;
+      
+          font-size:32px;
+      
+          color:var(--accent-green);
+      
+          opacity:.45;
+      
+          pointer-events:none;
+          user-select:none;
+      
+          z-index:-1;
+      
+          filter:drop-shadow(0 0 10px rgba(0,255,102,.45));
+      
+          will-change:transform;
       }
 </style>
 </head>
@@ -1246,7 +1301,6 @@
             <a href="https://doi.org/10.13140/RG.2.2.24691.28969" target="_blank" rel="noopener noreferrer" class="pub-doi-link">
                 DOI: 10.13140/RG.2.2.24691.28969 ↗
             </a>
-            <span class="pub-venue">ResearchGate</span>
         </div>
                 </article>
             </div>
@@ -1434,7 +1488,7 @@
                 <!-- SVG Pie Chart -->
                 <svg viewBox="0 0 200 200" class="pie-chart">
                 
-                    <!-- GitHub — 30% -->
+                    <!-- GitHub -->
                     <g class="pie-group"
                        data-name="GitHub"
                        data-link="https://github.com/juergenlaturisa">
@@ -1462,7 +1516,7 @@
                     </g>
                 
                 
-                    <!-- LinkedIn — 25% -->
+                    <!-- LinkedIn -->
                     <g class="pie-group"
                        data-name="LinkedIn"
                        data-link="https://www.linkedin.com/in/juergen-law">
@@ -1487,7 +1541,7 @@
                     </g>
                 
                 
-                    <!-- ResearchGate — 15% -->
+                    <!-- ResearchGate -->
                     <g class="pie-group"
                        data-name="ResearchGate"
                        data-link="https://www.researchgate.net/profile/Juergen-Laturisa?ev=hdr_xprf">
@@ -1515,7 +1569,7 @@
                     </g>
                 
                 
-                    <!-- ORCID — 10% -->
+                    <!-- ORCID -->
                     <g class="pie-group"
                        data-name="ORCID"
                        data-link="https://orcid.org/0009-0000-8070-2480">
@@ -1543,7 +1597,7 @@
                     </g>
                 
                 
-                    <!-- YouTube — 10% -->
+                    <!-- YouTube -->
                     <g class="pie-group"
                        data-name="YouTube"
                        data-link="https://www.youtube.com/@JuergenLaw">
@@ -1571,7 +1625,7 @@
                     </g>
                 
                 
-                    <!-- DevPost — 5% -->
+                    <!-- DevPost -->
                     <g class="pie-group"
                        data-name="DevPost"
                        data-link="https://devpost.com/juergenllaturisa">
@@ -1599,7 +1653,7 @@
                     </g>
                 
                 
-                    <!-- OSF — 5% -->
+                    <!-- OSF -->
                     <g class="pie-group"
                        data-name="OSF"
                        data-link="https://osf.io/c57he/">
@@ -1664,29 +1718,27 @@
             </div>
 
             <div class="contact-block">
-
                 <h3 class="contact-title">Contact</h3>
             
-                <button class="contact-button"
-                    onclick="copyEmail('juergenllaturisa@gmail.com','email-personal')">
+                <div class="contact-grid">
+                    <!-- Personal Button (Gmail) -->
+                    <button class="contact-button"
+                        onclick="copyEmail('juergenllaturisa@gmail.com','text-personal')">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.943L12 11.668l8.073-8.153C21.691 2.28 24 3.434 24 5.457z"/>
+                        </svg>
+                        <span id="text-personal">Personal</span>
+                    </button>
             
-                    <span>Personal</span>
-                    <span id="email-personal">
-                        juergenllaturisa@gmail.com
-                    </span>
-            
-                </button>
-            
-                <button class="contact-button"
-                    onclick="copyEmail('juergen.laturisa@mail.utoronto.ca','email-utm')">
-            
-                    <span>University</span>
-                    <span id="email-utm">
-                        juergen.laturisa@mail.utoronto.ca
-                    </span>
-            
-                </button>
-            
+                    <!-- University Button (Clean Classic Envelope) -->
+                    <button class="contact-button"
+                        onclick="copyEmail('juergen.laturisa@mail.utoronto.ca','text-utm')">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <span id="text-utm">University</span>
+                    </button>
+                </div>
             </div>
         </section>
     </div>
@@ -1813,7 +1865,7 @@
                 });
 
                 group.addEventListener('mouseleave', () => {
-                    sliceLabel.textContent = '// HOVER OR CLICK A SLICE';
+                    sliceLabel.textContent = '// PICK A PROFILE';
                     sliceLabel.style.borderColor = 'rgba(0, 255, 102, 0.3)';
                 });
 
@@ -1867,6 +1919,87 @@
                     alert(email);
                 });
             }
+
+            // ------------------------------------------------------------
+            // Ambient Background Relics
+            // ------------------------------------------------------------
+            
+            const relicSymbols = [
+                "☤",
+                "𓂀",
+                "⌘",
+                "⟡",
+                "₿",
+                "⌬",
+                "§"
+            ];
+            
+            let symbolIndex = 0;
+            let topTrack = true;
+            
+            function spawnRelic(){
+            
+                const relic = document.createElement("div");
+                relic.className = "floating-relic";
+            
+                relic.textContent = relicSymbols[symbolIndex];
+            
+                document.body.appendChild(relic);
+            
+                const container = document.querySelector(".container");
+                const rect = container.getBoundingClientRect();
+
+                const movingTop = topTrack;
+              
+                const topGap = 80;
+                const bottomGap = 80;
+                
+                const baseY = movingTop ? 200 : 400;
+              
+                topTrack = !topTrack;
+                symbolIndex = (symbolIndex + 1) % relicSymbols.length;
+            
+                const startTime = performance.now();
+            
+                const duration = 3000;
+            
+                const amplitude = 50;
+            
+                function animate(now){
+            
+                    const t = (now-startTime)/duration;
+            
+                    if(t>=1){
+            
+                        relic.remove();
+
+                        setTimeout(spawnRelic, 30000);
+                        
+                        return;
+            
+                    }
+            
+                    const x = movingTop
+                        ? -80 + (window.innerWidth + 160) * t
+                        : window.innerWidth + 80 - (window.innerWidth + 160) * t;
+            
+                    const y =
+                        baseY +
+                        Math.sin(t*Math.PI*2)*amplitude;
+            
+                    relic.style.transform =
+                        `translate(${x}px, ${y}px)`;
+            
+                    requestAnimationFrame(animate);
+            
+                }
+            
+                requestAnimationFrame(animate);
+            
+            }
+            
+            setTimeout(spawnRelic, 30000);
+      
     </script>
 </body>
 </html>
