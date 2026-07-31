@@ -1331,6 +1331,22 @@
           filter:drop-shadow(0 0 10px rgba(0,255,102,.45));
           will-change:transform;
       }
+
+      .golden-bloon {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 32px;
+          height: auto;
+          z-index: -1;
+          filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+          will-change: transform;
+          user-select: none;
+      }
+      
+      .golden-bloon:active {
+          transform: scale(0.85);
+      }
 </style>
 </head>
   
@@ -2242,11 +2258,54 @@
 
         function scheduleNextRelic() {
             spawnRelic();
-            const nextDelay = 1200 + Math.random() * 1300;
+            const nextDelay = 500 + Math.random() * 1300;
             setTimeout(scheduleNextRelic, nextDelay);
         }
 
-        setTimeout(scheduleNextRelic, 800);
+        setTimeout(scheduleNextRelic, 3000);
+
+        // ================= GOLDEN BLOON EASTER EGG =================
+        function spawnGoldenBloon() {
+            const bloon = document.createElement("img");
+            
+            bloon.src = "https://www.bloonswiki.com/images/thumb/3/37/BTD6_bloon_GoldenBloon.png/100px-BTD6_bloon_GoldenBloon.png";
+            bloon.className = "golden-bloon";
+            bloon.alt = "Golden Bloon";
+        
+            document.body.appendChild(bloon);
+        
+            const moveRight = Math.random() > 0.5;
+            const baseY = window.innerHeight * (0.15 + Math.random() * 0.6);
+            
+            const duration = 4000; 
+            const startTime = performance.now();
+            
+            const amplitude = 50;
+        
+            function animateBloon(now) {
+                const t = (now - startTime) / duration;
+        
+                if (t >= 1) {
+                    bloon.remove();
+                    return;
+                }
+        
+                const x = moveRight
+                    ? -100 + (window.innerWidth + 200) * t
+                    : window.innerWidth + 100 - (window.innerWidth + 200) * t;
+        
+                const y = baseY + Math.sin(t * Math.PI * 4) * amplitude;
+        
+                bloon.style.transform = `translate(${x}px, ${y}px)`;
+                requestAnimationFrame(animateBloon);
+            }
+        
+            requestAnimationFrame(animateBloon);
+        
+        }
+        
+        setInterval(spawnGoldenBloon, 60000);
+        
     </script>
 </body>
 </html>
