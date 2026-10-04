@@ -977,6 +977,30 @@
             color: var(--text-secondary);
         }
 
+        .experience-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .experience-stat {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.35rem;
+            padding: 0.25rem 0.55rem;
+            border-radius: 4px;
+            background: rgba(52, 211, 153, 0.06);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .experience-stat strong {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
       .projects-list {
           display: flex;
           flex-direction: column;
@@ -1475,6 +1499,24 @@
           gap: 8px;
       }
       
+      /* University pen collection */
+      .fun-facts-list .info-tooltip {
+          width:580px;
+          max-width: min(580px, calc(100vw - 2rem));
+      }
+
+      .fun-facts-list .info-tooltip .tooltip-list {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          column-gap: 1rem;
+          row-gap: 0.3rem;
+      }
+
+      .fun-facts-list .info-tooltip .tooltip-list li {
+          min-width: 0;
+          margin-bottom: 0;
+      }
+      
       .uni-icon {
           width: 18px;
           height: 18px;
@@ -1497,6 +1539,14 @@
       }
       
       @media (max-width: 768px) {
+          .fun-facts-list .info-tooltip {
+              width: min(460px, calc(100vw - 2rem));
+          }
+
+          .fun-facts-list .info-tooltip .tooltip-list {
+              grid-template-columns: 1fr;
+          }
+
           .info-tooltip {
               left: 0;
               top: 100%;
@@ -1571,8 +1621,8 @@
 
                 <a href="#publications" class="nav-card">
                     <div class="link-info">
-                        <span class="link-title">Publications</span>
-                        <span class="link-desc">Preprints, Articles, and similar publications</span>
+                        <span class="link-title">Research &amp; Publications</span>
+                        <span class="link-desc">Articles, Research experience, and Other Publications</span>
                     </div>
                     <span class="link-arrow">-&gt;</span>
                 </a>
@@ -1618,7 +1668,7 @@
                         <ul class="status-list">
                             <li><span class="status-dot green"></span> <strong>Academia:</strong> Studying course material.</li>
                             <li><span class="status-dot blue"></span> <strong>Research:</strong> Just published at <i>Science & Justice</i>.</li>
-                            <li><span class="status-dot yellow"></span> <strong>Other:</strong> Applying for IVNVI First-Year Representative.</li>
+                            <li><span class="status-dot yellow"></span> <strong>Other:</strong> Classifying Plant Specimen Locality for CAS.</li>
                         </ul>
                     </div>
         
@@ -1697,9 +1747,9 @@
         
                 <div class="about-image-container">
                     <div class="portrait-slider">
-                        <img src="https://laturisa.is-a.dev/images/projects/About%20Preview%201.jpeg" alt="Juergen Law Laturisa portrait in grayscale 1" class="about-vertical-img portrait-slide active">
-                        <img src="https://laturisa.is-a.dev/images/projects/About%20Preview%202.jpeg" alt="Juergen Law Laturisa portrait in grayscale 2" class="about-vertical-img portrait-slide">
-                        <img src="https://laturisa.is-a.dev/images/projects/About%20Preview%203.jpeg" alt="Juergen Law Laturisa portrait in grayscale 3" class="about-vertical-img portrait-slide">
+                        <img src="https://laturisa.is-a.dev/images/About%20Preview%201.jpeg" alt="Juergen Law Laturisa portrait in grayscale 1" class="about-vertical-img portrait-slide active">
+                        <img src="https://laturisa.is-a.dev/images/About%20Preview%202.jpeg" alt="Juergen Law Laturisa portrait in grayscale 2" class="about-vertical-img portrait-slide">
+                        <img src="https://laturisa.is-a.dev/images/About%20Preview%203.jpeg" alt="Juergen Law Laturisa portrait in grayscale 3" class="about-vertical-img portrait-slide">
                     </div>
                     <div class="image-accent"></div>
                 </div>
@@ -1718,7 +1768,7 @@
             <div class="cv-layout">
                 <div class="cv-doc-container">
                     <img 
-                        src="https://laturisa.is-a.dev/images/projects/CV%20Preview.png" 
+                        src="https://laturisa.is-a.dev/images/CV%20Preview.png" 
                         alt="Preview of Juergen Law Laturisa's Life Science Curriculum Vitae" 
                         class="cv-img"
                     />
@@ -1727,7 +1777,7 @@
                 <div class="cv-highlights">
                     <div class="highlight-box">
                         <div class="highlight-title"> Program of Study</div>
-                        <p class="highlight-text">Forensic Science (Biology Specialization) @ University of Toronto Mississauga.</p>
+                        <p class="highlight-text">Forensic Science (Biology Specialization intended) @ University of Toronto Mississauga.</p>
                     </div>
 
                     <div class="highlight-box">
@@ -1735,7 +1785,8 @@
                         <ul class="highlight-list">
                             <li>Awarded the International Scholar Award worth up to CAD 180,000 over four years.</li>
                             <li>Wrote an independent forensic-botany paper, currently under review at <i>Science & Justice</i>.</li>
-                            <li>Selected as 1 of 3 final-year students for an Advanced Biology Enrichment Group.</li>
+                            <li>Developed a cold-chain compliance tracker which track the degradation of volatile bio-assets
+</li>
                             <li>Organized hands-on science outreach for 100+ elementary students.</li>
                         </ul>
                     </div>
@@ -1768,18 +1819,20 @@
             </div>
         </section>
 
-        <!-- ================= PUBLICATIONS SUB-PAGE VIEW ================= -->
+        <!-- ================= RESEARCH & PUBLICATIONS SUB-PAGE VIEW ================= -->
         <section id="view-publications" class="view">
             <a href="#home" class="back-nav">&lt;- Back to Home</a>
             
             <div class="page-header">
-                <h2 class="page-title">Publications</h2>
-                <p class="page-desc">// Preprints, Articles, and similar publications</p>
+                <h2 class="page-title">Research &amp; Publications</h2>
+                <p class="page-desc">// Articles, Research Experience, and Other Publications</p>
             </div>
         
             <div class="pub-filters">
-                <button class="pub-filter-btn active" data-filter="all">All (1)</button>
+                <button class="pub-filter-btn active" data-filter="all">All (2)</button>
                 <button class="pub-filter-btn" data-filter="preprint">Preprints</button>
+                <button class="pub-filter-btn" data-filter="experience">Experiences</button>
+                <button class="pub-filter-btn" data-filter="presentation">Presentations</button>
             </div>
         
             <div class="publications-list">
@@ -1800,13 +1853,33 @@
                     </p>
                   
                     <p class="pub-abstract">
-                        Currently under review at <i>Science & Justice</i>.
+                        Currently under review at <i>Science &amp; Justice</i>.
                     </p>
         
                     <div class="pub-footer">
                         <a href="https://doi.org/10.13140/RG.2.2.24691.28969" target="_blank" rel="noopener noreferrer" class="pub-doi-link">
                             DOI: 10.13140/RG.2.2.24691.28969 ↗
                         </a>
+                    </div>
+                </article>
+
+                <article class="pub-card" data-category="experience">
+                    <div class="pub-header">
+                        <span class="pub-badge review-badge">Experience</span>
+                        <span class="pub-year">Ongoing</span>
+                    </div>
+
+                    <h3 class="pub-title">California Academy of Sciences Herbarium Digitization</h3>
+
+                    <p class="pub-abstract">
+                        A project that digitizes historical herbarium specimens from the California Academy of Sciences (CAS). I handle the determination of plant specimen locality within the state of Oregon, interpreting geographic coordinates and systems such as datums and TRS/PLSS, and using Getty TGN and Google Maps to determine each specimen's county of origin.
+                    </p>
+
+                    <div class="pub-footer">
+                        <div class="experience-stats" aria-label="Experience statistics">
+                            <span class="experience-stat"><strong>50</strong> Specimens Classified</span>
+                            <span class="experience-stat"><strong>3</strong> Hours</span>
+                        </div>
                     </div>
                 </article>
             </div>
