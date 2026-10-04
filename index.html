@@ -869,7 +869,6 @@
         .publications-list {
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
         }
         
         .pub-card {
@@ -880,6 +879,30 @@
             display: flex;
             flex-direction: column;
             gap: 0.6rem;
+            margin-bottom: 1.25rem;
+            
+            transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                        padding 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                        margin 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                        opacity 0.4s ease, 
+                        border-width 0.4s ease;
+            max-height: 800px;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .pub-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .pub-card.hidden {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-bottom: 0;
+            opacity: 0;
+            border-width: 0;
+            pointer-events: none;
         }
         
         .featured-pub {
@@ -1845,7 +1868,7 @@
                     <h3 class="pub-title">Re-evaluating RAPD-Based Plant DNA Evidence from the 1992 Maricopa Homicide Investigation: A Modern Reassessment of the First Court-Accepted Molecular Botanical Evidence</h3>
                     
                     <p class="pub-authors">
-                        <strong>Laturisa J.L.</strong>
+                        <strong>Laturisa J.L.</strong>, Independent
                     </p>
         
                     <p class="pub-abstract">
@@ -1866,10 +1889,14 @@
                 <article class="pub-card" data-category="experience">
                     <div class="pub-header">
                         <span class="pub-badge review-badge">Experience</span>
-                        <span class="pub-year">Ongoing</span>
+                        <span class="pub-year">2026–Present</span>
                     </div>
 
                     <h3 class="pub-title">California Academy of Sciences Herbarium Digitization</h3>
+
+                    <p class="pub-authors">
+                  <strong style="color: var(--accent-green);">Research Contributor</strong>
+              </p>
 
                     <p class="pub-abstract">
                         A project that digitizes historical herbarium specimens from the California Academy of Sciences (CAS). I handle the determination of plant specimen locality within the state of Oregon, interpreting geographic coordinates and systems such as datums and TRS/PLSS, and using Getty TGN and Google Maps to determine each specimen's county of origin.
@@ -1882,6 +1909,19 @@
                         </div>
                     </div>
                 </article>
+              
+                <article class="pub-card placeholder-pub" data-category="presentation">
+                      <div class="pub-header">
+                          <span class="pub-badge" style="background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); border: 1px solid rgba(148, 163, 184, 0.3);">Presentation</span>
+                          <span class="pub-year">TBA</span>
+                      </div>
+                      
+                      <h3 class="pub-title" style="color: var(--text-secondary);">Upcoming Presentations</h3>
+                      
+                      <p class="pub-abstract" style="color: var(--text-secondary); font-style: italic;">
+                          something is coming soon :)
+                      </p>
+                  </article>
             </div>
         </section>
 
@@ -2511,7 +2551,11 @@
                             filterValue === 'all' ||
                             card.getAttribute('data-category') === filterValue;
 
-                        card.style.display = matches ? 'flex' : 'none';
+                        if (matches) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
                     });
                 });
             });
