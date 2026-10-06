@@ -929,7 +929,7 @@
             font-weight: 500;
         }
         
-        .preprint-badge {
+        .article-badge {
             background: rgba(56, 189, 248, 0.15);
             color: var(--accent-blue);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -1670,7 +1670,7 @@
             
             <div class="page-header">
                 <h2 class="page-title">About Me</h2>
-                <p class="page-desc">// Profile, operations, and trivia</p>
+                <p class="page-desc">// Profile, Current Works, and Trivia</p>
             </div>
         
             <div class="about-layout">
@@ -1689,8 +1689,8 @@
                     <div class="about-section">
                         <h3 class="about-heading">// Current Works</h3>
                         <ul class="status-list">
-                            <li><span class="status-dot green"></span> <strong>Academia:</strong> Studying course material.</li>
-                            <li><span class="status-dot blue"></span> <strong>Research:</strong> Just published at <i>Science & Justice</i>.</li>
+                            <li><span class="status-dot green"></span> <strong>Academia:</strong> Just bombed my CHM Term Test 😔.</li>
+                            <li><span class="status-dot blue"></span> <strong>Research:</strong> Just published at <i>Science & Justice</i> 🥳.</li>
                             <li><span class="status-dot yellow"></span> <strong>Other:</strong> Classifying Plant Specimen Locality for CAS.</li>
                         </ul>
                     </div>
@@ -1791,7 +1791,7 @@
             <div class="cv-layout">
                 <div class="cv-doc-container">
                     <img 
-                        src="https://laturisa.is-a.dev/images/CV%20Preview.png" 
+                        src="https://laturisa.is-a.dev/images/CV%20Preview.jpg" 
                         alt="Preview of Juergen Law Laturisa's Life Science Curriculum Vitae" 
                         class="cv-img"
                     />
@@ -1800,14 +1800,14 @@
                 <div class="cv-highlights">
                     <div class="highlight-box">
                         <div class="highlight-title"> Program of Study</div>
-                        <p class="highlight-text">Forensic Science (Biology Specialization intended) @ University of Toronto Mississauga.</p>
+                        <p class="highlight-text">Forensic Science @ University of Toronto Mississauga.</p>
                     </div>
 
                     <div class="highlight-box">
                         <div class="highlight-title">Highlights</div>
                         <ul class="highlight-list">
                             <li>Awarded the International Scholar Award worth up to CAD 180,000 over four years.</li>
-                            <li>Wrote an independent forensic-botany paper, currently under review at <i>Science & Justice</i>.</li>
+                            <li>Wrote an independent, sole-author, peer-reviewed forensic botany article in <i>Science & Justice</i>.</li>
                             <li>Developed a cold-chain compliance tracker which track the degradation of volatile bio-assets
 </li>
                             <li>Organized hands-on science outreach for 100+ elementary students.</li>
@@ -1831,7 +1831,7 @@
                         <span class="alt-link-icon">↗</span>
                     </a>
                     <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.end3sxcleqlj" class="alt-link-card" target="_blank" rel="noopener noreferrer">
-                        <span class="alt-link-title">Business & Finance</span>
+                        <span class="alt-link-title">Finance</span>
                         <span class="alt-link-icon">↗</span>
                     </a>
                     <a href="https://docs.google.com/document/d/1M8SSm4qlQj0dRdOmJS1pU8YCCj2d5uIZYTOfOZQH7iM/edit?tab=t.3e26gwwuv8tz" class="alt-link-card" target="_blank" rel="noopener noreferrer">
@@ -1853,16 +1853,20 @@
         
             <div class="pub-filters">
                 <button class="pub-filter-btn active" data-filter="all">All (2)</button>
-                <button class="pub-filter-btn" data-filter="preprint">Preprints</button>
+                <button class="pub-filter-btn" data-filter="article">Articles</button>
                 <button class="pub-filter-btn" data-filter="experience">Experiences</button>
                 <button class="pub-filter-btn" data-filter="presentation">Presentations</button>
             </div>
         
             <div class="publications-list">
-                <article class="pub-card featured-pub" data-category="preprint">
+                <article class="pub-card featured-pub" data-category="article">
                     <div class="pub-header">
-                        <span class="pub-badge preprint-badge">Preprint</span>
+                        <span class="pub-badge preprint-badge">Article</span>
                         <span class="pub-year">2026</span>
+                    </div>
+                    
+                    <div style="color: var(--accent-blue); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                        Science &amp; Justice, Volume 66, Issue 6, Article 101530
                     </div>
         
                     <h3 class="pub-title">Re-evaluating RAPD-Based Plant DNA Evidence from the 1992 Maricopa Homicide Investigation: A Modern Reassessment of the First Court-Accepted Molecular Botanical Evidence</h3>
@@ -1874,14 +1878,10 @@
                     <p class="pub-abstract">
                         This study re-examines the Blue Palo Verde (<i>Parkinsonia florida</i>) seed pod evidence by reassessing its statistical weight using modern population genetics principles and evaluating its admissibility under the transition from the <i>Frye</i> to the <i>Daubert</i> standard.
                     </p>
-                  
-                    <p class="pub-abstract">
-                        Currently under review at <i>Science &amp; Justice</i>.
-                    </p>
         
                     <div class="pub-footer">
-                        <a href="https://doi.org/10.13140/RG.2.2.24691.28969" target="_blank" rel="noopener noreferrer" class="pub-doi-link">
-                            DOI: 10.13140/RG.2.2.24691.28969 ↗
+                        <a href="https://doi.org/10.1016/j.scijus.2026.101530" target="_blank" rel="noopener noreferrer" class="pub-doi-link">
+                            DOI: 10.1016/j.scijus.2026.101530 ↗
                         </a>
                     </div>
                 </article>
@@ -1892,11 +1892,15 @@
                         <span class="pub-year">2026–Present</span>
                     </div>
 
-                    <h3 class="pub-title">California Academy of Sciences Herbarium Digitization</h3>
+                    <div style="color: var(--accent-blue); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                        California Academy of Sciences
+                    </div>
+
+                    <h3 class="pub-title">Notes from Nature - Plants to Pixels</h3>
 
                     <p class="pub-authors">
-                  <strong style="color: var(--accent-green);">Research Contributor</strong>
-              </p>
+                        <strong style="color: var(--accent-green);">Research Contributor</strong>
+                    </p>
 
                     <p class="pub-abstract">
                         A project that digitizes historical herbarium specimens from the California Academy of Sciences (CAS). I handle the determination of plant specimen locality within the state of Oregon, interpreting geographic coordinates and systems such as datums and TRS/PLSS, and using Getty TGN and Google Maps to determine each specimen's county of origin.
